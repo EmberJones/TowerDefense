@@ -1,16 +1,19 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Attacker))]
 public class Defender : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Health health;
+
+    private void Awake()
     {
-        
+        health = GetComponent<Health>();
+        health.OnDeath += HandleDeath;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void HandleDeath()
     {
-        
+        Destroy(gameObject);
     }
 }

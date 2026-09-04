@@ -2,35 +2,43 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] public float speed = 20f;
-    [SerializeField] public float lifetime = 3f;
-    [SerializeField] public int damage = 5;
+    private Transform target;
+    private int damage;
+    private float speed;
 
-    private Rigidbody rb;
-
-    private void Awake()
+    public void Initialize(Transform target, int damage, float speed)
     {
-        rb = GetComponent<Rigidbody>();
+        this.target = target;
+        this.damage = damage;
+        this.speed = speed;
     }
 
-    private void Start()
+    private void Update()
     {
-        rb.linearVelocity = transform.right * speed;
-        Destroy(gameObject, lifetime);
-    }
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        // Replace with your target's health system logic
-        if (collision.gameObject.CompareTag("Enemy")&&collision.TryGetComponent<IDamageable>(out IDamageable damageable))
-        {
-            damageable.TakeDamage(damage);
-            Destroy(gameObject); 
-        }
-
-        if (collision.gameObject.CompareTag("Terrain"))
+        if (target == null)
         {
             Destroy(gameObject);
+            return;
         }
+
+        Vector3 targetPos = target.position + Vector3.up;
+        Vector3 dir = targetPos - transform.position;
+        float step = speed * Time.deltaTime;
+
+        if (dir.magnitude <= step)
+        {
+            HitTarget();
+            return;
+        }
+
+        transform.position += dir.normalized * step;
+        transform.forward = dir.normalized;
+    }
+
+    private void HitTarget()
+    {
+        IDamageable damageable = target.GetComponent<IDamageable>();
+        damageable?.TakeDamage(damage);
+        Destroy(gameObject);
     }
 }
