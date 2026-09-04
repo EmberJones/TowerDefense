@@ -71,9 +71,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
-  attackRange: 8
+  attackRange: 12
   attackInterval: 1
-  attackDamage: 10
+  attackDamage: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 8

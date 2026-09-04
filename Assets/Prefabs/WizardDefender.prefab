@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.48904717
+      value: -7.8841352
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000050133792
+      value: 1.0831773
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.4178201
+      value: -0.6302282
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f474d4babe02e44ad7ea0a5b44a74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
-  currentHealthValue: 100
+  maxHealth: 25
+  currentHealthValue: 25
 --- !u!114 &9159482328499207708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4404a745eda4f93429d1420876b2f8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WizardAnimator
-  attacker: {fileID: 0}
-  health: {fileID: 0}
+  attacker: {fileID: 9159482328499207708}
+  health: {fileID: 7588096361561514491}
 --- !u!64 &1672543425531352262
 MeshCollider:
   m_ObjectHideFlags: 0
