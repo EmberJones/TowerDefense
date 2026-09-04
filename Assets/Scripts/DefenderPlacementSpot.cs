@@ -4,23 +4,24 @@ public class DefenderPlacementSpot : MonoBehaviour
 {
     public bool IsOccupied { get; private set; }
 
-    private DefenderFactory towerFactory;
+    private DefenderFactory defenderFactory;
 
     public void Initialize(DefenderFactory factory)
     {
-        towerFactory = factory;
+        defenderFactory = factory;
     }
 
     private void OnMouseDown()
     {
-        PlaceDefender();
+        if (IsOccupied) return;
+        ShopUI.Instance?.Open(this);
     }
 
-    public void PlaceDefender()
+    public void PlaceDefender(DefenderFactory.DefenderType type)
     {
-        if (IsOccupied || towerFactory == null) return;
+        if (IsOccupied || defenderFactory == null) return;
 
-        towerFactory.CreateDefender(DefenderFactory.DefenderType.Basic, transform.position);
+        defenderFactory.CreateDefender(type, transform.position);
         IsOccupied = true;
     }
 
