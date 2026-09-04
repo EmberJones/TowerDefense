@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 895653365442215501}
   - component: {fileID: 1468621897056949626}
   - component: {fileID: 2643860749673890384}
+  - component: {fileID: 4192278738939625031}
   m_Layer: 3
   m_Name: Defender
   m_TagString: Player
@@ -65,15 +66,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
-  attackRange: 8
-  attackInterval: 1
-  attackDamage: 10
+  attackRange: 16
+  attackInterval: 0.25
+  attackDamage: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 9093493400128062952}
-  projectileSpeed: 20
+  projectileSpeed: 25
 --- !u!114 &5462654119399786717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +180,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WizardAnimator
   attacker: {fileID: 3137267780414001217}
   health: {fileID: 3664563011282583790}
+--- !u!64 &4192278738939625031
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878676469827547954}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6449654466282237968, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
 --- !u!1 &8106764098055006261
 GameObject:
   m_ObjectHideFlags: 0
