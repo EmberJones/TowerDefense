@@ -11,7 +11,7 @@ public class Attacker : MonoBehaviour
     public Transform firePoint;
     public float projectileSpeed = 20f;
 
-    public event Action OnAttack; // NEW
+    public event Action OnAttack;
 
     private float attackTimer;
     private Transform currentTarget;
@@ -61,7 +61,7 @@ public class Attacker : MonoBehaviour
 
     private void Attack(Transform target)
     {
-        OnAttack?.Invoke(); // NEW — fired every time an attack happens
+        OnAttack?.Invoke();
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
 
