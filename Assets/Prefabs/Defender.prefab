@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5208878840908557861}
   - component: {fileID: 895653365442215501}
   - component: {fileID: 1468621897056949626}
+  - component: {fileID: 2643860749673890384}
   m_Layer: 3
   m_Name: Defender
   m_TagString: Player
@@ -164,6 +165,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2643860749673890384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878676469827547954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4404a745eda4f93429d1420876b2f8ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WizardAnimator
+  attacker: {fileID: 3137267780414001217}
+  health: {fileID: 3664563011282583790}
 --- !u!1 &8106764098055006261
 GameObject:
   m_ObjectHideFlags: 0

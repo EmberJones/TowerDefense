@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Attacker : MonoBehaviour
@@ -9,6 +10,8 @@ public class Attacker : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform firePoint;
     public float projectileSpeed = 20f;
+
+    public event Action OnAttack; // NEW
 
     private float attackTimer;
     private Transform currentTarget;
@@ -58,6 +61,8 @@ public class Attacker : MonoBehaviour
 
     private void Attack(Transform target)
     {
+        OnAttack?.Invoke(); // NEW — fired every time an attack happens
+
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
 
         if (projectilePrefab != null)
