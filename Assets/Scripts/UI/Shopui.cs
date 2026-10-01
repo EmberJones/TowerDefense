@@ -18,6 +18,8 @@ public class ShopUI : MonoBehaviour
 
     public void Open(DefenderPlacementSpot spot)
     {
+        UpgradeUI.Instance?.Close();
+
         currentSpot = spot;
 
         if (panelRoot != null)

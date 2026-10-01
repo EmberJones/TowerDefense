@@ -3,21 +3,33 @@ using UnityEngine;
 
 public class Attacker : MonoBehaviour
 {
-    public float attackRange = 8f;
-    public float attackInterval = 1f;
-    public int attackDamage = 10;
-    public LayerMask targetLayer;
-    public GameObject projectilePrefab;
-    public Transform firePoint;
-    public float projectileSpeed = 20f;
+    public enum AttackType { Ranged, Melee }
 
-    public event Action OnAttack;
+    [SerializeField] public AttackType attackType = AttackType.Ranged;
+    [SerializeField] public float attackRange = 8f;
+    [SerializeField] public float attackInterval = 1f;
+    [SerializeField] public int attackDamage = 10;
+    [SerializeField] public LayerMask targetLayer;
+    [SerializeField] public GameObject projectilePrefab;
+    [SerializeField] public Transform firePoint;
+    [SerializeField] public float projectileSpeed = 20f;
+    [Header("Range Indicator")][SerializeField] private bool showRangeIndicator = true; [SerializeField] private Color rangeColor = new Color(1f, 0.85f, 0f, 0.35f); [SerializeField] private float rangeLineWidth = 0.05f; [SerializeField] private int rangeSegments = 64;
+    public LineRenderer rangeIndicator;
+    public event Action<Transform> OnAttack;
+    public event Action<Transform> OnAttackHit;
 
     private float attackTimer;
     private Transform currentTarget;
 
+    public Transform CurrentTarget => currentTarget;
+    private void Awake()
+    {
+        CreateRangeIndicator();
+    }
+
     private void Update()
     {
+        UpdateRangeIndicator();
         FindTarget();
 
         if (currentTarget == null)
@@ -61,21 +73,48 @@ public class Attacker : MonoBehaviour
 
     private void Attack(Transform target)
     {
-        OnAttack?.Invoke();
+        OnAttack?.Invoke(target);
+
+        if (attackType == AttackType.Melee || projectilePrefab == null)
+        {
+            ApplyDamage(target);
+            return;
+        }
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
+        GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        Projectile projectile = proj.GetComponent<Projectile>();
+        if (projectile != null)
+            projectile.Initialize(target, attackDamage, projectileSpeed, HandleHit);
+    }
 
-        if (projectilePrefab != null)
+    private void ApplyDamage(Transform target)
+    {
+        IDamageable damageable = target.GetComponent<IDamageable>();
+        damageable?.TakeDamage(attackDamage);
+        HandleHit(target);
+    }
+
+    private void HandleHit(Transform target)
+    {
+        OnAttackHit?.Invoke(target);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+    private void CreateRangeIndicator()
+    {
+        GameObject indicatorObject = new GameObject("Range Indicator"); indicatorObject.transform.SetParent(transform); indicatorObject.transform.localPosition = Vector3.zero; indicatorObject.transform.localRotation = Quaternion.identity; rangeIndicator = indicatorObject.AddComponent<LineRenderer>(); rangeIndicator.useWorldSpace = false; rangeIndicator.loop = true; rangeIndicator.positionCount = rangeSegments; rangeIndicator.startWidth = rangeLineWidth; rangeIndicator.endWidth = rangeLineWidth; // Create a simple transparent material. Material material = new Material(Shader.Find("Sprites/Default")); material.color = rangeColor; rangeIndicator.material = material; DrawRangeCircle(); }
+    }
+    private void UpdateRangeIndicator() { if (rangeIndicator == null) return; rangeIndicator.enabled = showRangeIndicator; if (showRangeIndicator) DrawRangeCircle(); }
+    private void DrawRangeCircle()
+    {
+        if (rangeIndicator == null) return; rangeIndicator.positionCount = rangeSegments; for (int i = 0; i < rangeSegments; i++)
         {
-            GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-            Projectile projectile = proj.GetComponent<Projectile>();
-            if (projectile != null)
-                projectile.Initialize(target, attackDamage, projectileSpeed);
-        }
-        else
-        {
-            IDamageable damageable = target.GetComponent<IDamageable>();
-            damageable?.TakeDamage(attackDamage);
+            float angle = ((float)i / rangeSegments) * Mathf.PI * 2f; float x = Mathf.Cos(angle) * attackRange; float z = Mathf.Sin(angle) * attackRange; // Slightly above the ground to prevent z-fighting. rangeIndicator.SetPosition(i, new Vector3(x, 0.05f, z)); } }
         }
     }
 }

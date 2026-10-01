@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
+  m_Name: MaelstromCurse
+  m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
+  upgradeName: Maelstrom
+  description: 'Death curse creates a storm of lightning
+
+'
+  slot: 4
+  icon: {fileID: 21300000, guid: 6f81d5a77b988ca448537e08c1c80a40, type: 3}
+  bonusDamage: 0
+  bonusRange: 0
+  attackIntervalMultiplier: 1
+  bonusMaxHealth: 0
+  effectPrefab: {fileID: 2642956833051195722, guid: 109e8a020c7bca240a91fd81dc4b5171, type: 3}

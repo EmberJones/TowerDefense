@@ -3,7 +3,12 @@ guid: 1585210ef5f86354290962b6dd369d1c
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BardMat
+    second: {fileID: 2100000, guid: 5ea8891b8c305a34987dc3949c3250dd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

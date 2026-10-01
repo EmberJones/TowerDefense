@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DefenderFactory : MonoBehaviour
 {
-    public enum DefenderType { Basic }
+    public enum DefenderType { Wizard, Witch, Bard, Barbarian, Knight}
 
     [System.Serializable]
     public struct DefenderEntry

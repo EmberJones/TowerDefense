@@ -71,15 +71,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
+  attackType: 1
   attackRange: 12
   attackInterval: 1
   attackDamage: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
+  projectilePrefab: {fileID: 0}
   firePoint: {fileID: 3229781322882976381}
   projectileSpeed: 20
+  showRangeIndicator: 1
+  rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}
+  rangeLineWidth: 0.05
+  rangeSegments: 64
+  rangeIndicator: {fileID: 0}
 --- !u!114 &4131687766044717844
 MonoBehaviour:
   m_ObjectHideFlags: 0

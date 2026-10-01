@@ -3,7 +3,12 @@ guid: 6da302daf1aa95f4aba35e94162d4a99
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ElfMat
+    second: {fileID: 2100000, guid: 7bb2a993951c873458fbdd5a7fca1c26, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

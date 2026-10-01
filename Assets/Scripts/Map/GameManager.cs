@@ -30,6 +30,15 @@ public class GameManager : MonoBehaviour
         mainTower.PlaceAtCenter();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ShopUI.Instance?.Close();
+            UpgradeUI.Instance?.Close();
+        }
+    }
+
     public void GameOver()
     {
         if (IsGameOver) return;

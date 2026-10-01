@@ -5,7 +5,6 @@ public class DefenderPlacementSpot : MonoBehaviour
     public bool IsOccupied { get; private set; }
 
     private DefenderFactory defenderFactory;
-
     public void Initialize(DefenderFactory factory)
     {
         defenderFactory = factory;
@@ -23,6 +22,10 @@ public class DefenderPlacementSpot : MonoBehaviour
 
         defenderFactory.CreateDefender(type, transform.position);
         IsOccupied = true;
+
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+            col.enabled = false;
     }
 
     private void OnDrawGizmos()

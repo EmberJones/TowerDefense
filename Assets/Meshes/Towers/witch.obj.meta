@@ -3,7 +3,12 @@ guid: 11a62bbf34694a745a0894110d11b524
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WitchMat
+    second: {fileID: 2100000, guid: 7ed91b4df8c86c0449b0d3113a023a2c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

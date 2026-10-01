@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
+  m_Name: BurnLightning
+  m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
+  upgradeName: Lightning Burn
+  description: Chain lightning ignites enemies
+  slot: 3
+  icon: {fileID: 21300000, guid: a5f900f5821d48945af1a2bab001c9ba, type: 3}
+  bonusDamage: 0
+  bonusRange: 0
+  attackIntervalMultiplier: 1
+  bonusMaxHealth: 0
+  effectPrefab: {fileID: 7259611384142864595, guid: 3a24076c700e2014abd8c0c636714689, type: 3}

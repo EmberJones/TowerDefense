@@ -35,6 +35,6 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPos = path.SampledPoints[0];
         spawnPos.y = terrainGenerator.SampleHeight(spawnPos.x, spawnPos.z);
 
-        enemyFactory.CreateEnemy(EnemyFactory.EnemyType.Basic, spawnPos, path.SampledPoints, terrainGenerator);
+        enemyFactory.CreateEnemy(EnemyFactory.EnemyType.Zombie, spawnPos, path.SampledPoints, terrainGenerator);
     }
 }

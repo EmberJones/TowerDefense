@@ -5,6 +5,7 @@ public class WizardAnimator : MonoBehaviour
 {
     [SerializeField] private Attacker attacker;
     [SerializeField] private Health health;
+    [SerializeField] private float rotationSpeed = 10f;
 
     private static readonly int AttackTrigger = Animator.StringToHash("Attack");
     private static readonly int DieTrigger = Animator.StringToHash("Die");
@@ -34,7 +35,27 @@ public class WizardAnimator : MonoBehaviour
             health.OnDeath -= HandleDeath;
     }
 
-    private void HandleAttack()
+    private void Update()
+    {
+        FaceCurrentTarget();
+    }
+
+    private void FaceCurrentTarget()
+    {
+        if (attacker == null || attacker.CurrentTarget == null)
+            return;
+
+        Vector3 direction = attacker.CurrentTarget.position - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    private void HandleAttack(Transform target)
     {
         animator.SetTrigger(AttackTrigger);
     }

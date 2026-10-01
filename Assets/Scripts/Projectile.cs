@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -5,12 +6,14 @@ public class Projectile : MonoBehaviour
     private Transform target;
     private int damage;
     private float speed;
+    private Action<Transform> onHit;
 
-    public void Initialize(Transform target, int damage, float speed)
+    public void Initialize(Transform target, int damage, float speed, Action<Transform> onHit = null)
     {
         this.target = target;
         this.damage = damage;
         this.speed = speed;
+        this.onHit = onHit;
     }
 
     private void Update()
@@ -39,6 +42,7 @@ public class Projectile : MonoBehaviour
     {
         IDamageable damageable = target.GetComponent<IDamageable>();
         damageable?.TakeDamage(damage);
+        onHit?.Invoke(target);
         Destroy(gameObject);
     }
 }

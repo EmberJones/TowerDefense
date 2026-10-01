@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
 {
-    public enum EnemyType { Basic }
+    public enum EnemyType { Zombie,Ghost,Vampire }
 
     [System.Serializable]
     public struct EnemyEntry

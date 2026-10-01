@@ -3,7 +3,12 @@ guid: 79d02db773db82c4a9bf737387c53cb4
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WizardMat
+    second: {fileID: 2100000, guid: b8090345dda0dbc45b6633285c02dab5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
