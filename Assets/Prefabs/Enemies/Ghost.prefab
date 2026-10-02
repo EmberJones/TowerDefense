@@ -54,8 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   moveSpeed: 3
   attackRange: 2
-  attackInterval: 1
-  attackDamage: 10
+  attackInterval: 0.2
+  attackDamage: 1
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
