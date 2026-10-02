@@ -12,8 +12,8 @@ public class WaveManager : MonoBehaviour
     public float enemiesPerWaveGrowth = 1.5f;
     public float timeBetweenWaves = 8f;
 
-    public float rangedChance = 1;
-    public float rusherChance = 0.4f;
+    [SerializeField] private float rangedChanceMult = 0.6f;
+    [SerializeField] private float rusherChanceMult = 0.4f;
 
     private int waveNumber;
     private int nextPathIndex;
@@ -23,33 +23,21 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("<color=cyan>[WaveManager]</color> Start() called. Beginning RunWaves coroutine.");
         StartCoroutine(RunWaves());
     }
 
     private IEnumerator RunWaves()
     {
-        Debug.Log("<color=cyan>[WaveManager]</color> RunWaves coroutine started.");
-
         while (GameManager.Instance == null || !GameManager.Instance.IsGameOver)
         {
             waveNumber++;
-            Debug.Log($"<color=yellow>[WaveManager]</color> ===== WAVE {waveNumber} STARTING ===== " +
-                      $"(difficultyMultiplier={difficultyMultiplier:F2})");
 
             yield return StartCoroutine(SpawnWave());
 
-            Debug.Log($"<color=yellow>[WaveManager]</color> ===== WAVE {waveNumber} SPAWNING COMPLETE ===== " +
-                      $"(killed={enemiesKilledThisWave}, leaked={enemiesLeakedThisWave})");
-
             AdjustDifficulty();
 
-            Debug.Log($"<color=orange>[WaveManager]</color> Wave {waveNumber} ended. " +
-                      $"Waiting {timeBetweenWaves}s before next wave...");
             yield return new WaitForSeconds(timeBetweenWaves);
         }
-
-        Debug.Log("<color=red>[WaveManager]</color> RunWaves loop exited (game over or GameManager missing).");
     }
 
     private IEnumerator SpawnWave()
@@ -67,8 +55,6 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             EnemyFactory.EnemyType type = PickEnemyType();
-            Debug.Log($"<color=green>[WaveManager]</color> Wave {waveNumber} spawning enemy {i + 1}/{enemyCount} " +
-                      $"of type <b>{type}</b>");
             SpawnEnemy(type);
             yield return new WaitForSeconds(interval);
         }
@@ -76,8 +62,8 @@ public class WaveManager : MonoBehaviour
 
     private EnemyFactory.EnemyType PickEnemyType()
     {
-        float rangedChance = Mathf.Clamp01((waveNumber - 2) * 0.12f);
-        float rusherChance = Mathf.Clamp01((waveNumber - 4) * 0.20f);
+        float rangedChance = Mathf.Clamp01((waveNumber - 5) * rangedChanceMult);
+        float rusherChance = Mathf.Clamp01((waveNumber - 2) * rusherChanceMult);
 
         float roll = Random.value;
         EnemyFactory.EnemyType chosen;
@@ -106,9 +92,6 @@ public class WaveManager : MonoBehaviour
         Vector3 spawnPos = path.SampledPoints[0];
         spawnPos.y = terrainGenerator.SampleHeight(spawnPos.x, spawnPos.z);
 
-        Debug.Log($"<color=green>[WaveManager]</color> Spawning {type} at {spawnPos} on path index " +
-                  $"{(nextPathIndex == 0 ? pathGenerator.Paths.Count - 1 : nextPathIndex - 1)}");
-
         Enemy enemy = enemyFactory.CreateEnemy(type, spawnPos, path.SampledPoints, terrainGenerator);
         if (enemy == null)
         {
@@ -119,8 +102,6 @@ public class WaveManager : MonoBehaviour
         enemy.OnReachedMainTower += () =>
         {
             enemiesLeakedThisWave++;
-            Debug.Log($"<color=magenta>[WaveManager]</color> Enemy LEAKED to main tower! " +
-                      $"Wave {waveNumber} leaks so far: {enemiesLeakedThisWave}");
         };
 
         Health health = enemy.GetComponent<Health>();
@@ -129,8 +110,6 @@ public class WaveManager : MonoBehaviour
             health.OnDeath += () =>
             {
                 enemiesKilledThisWave++;
-                Debug.Log($"<color=magenta>[WaveManager]</color> Enemy KILLED! " +
-                          $"Wave {waveNumber} kills so far: {enemiesKilledThisWave}");
             };
         }
         else
