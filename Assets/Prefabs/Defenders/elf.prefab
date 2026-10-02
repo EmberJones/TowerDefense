@@ -613,7 +613,7 @@ MonoBehaviour:
   projectileSpeed: 25
   deferRangedResolution: 0
   showRangeIndicator: 1
-  rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}
+  rangeColor: {r: 0.0747597, g: 0.754717, b: 0.09537223, a: 0.35}
   rangeLineWidth: 0.05
   rangeSegments: 64
   rangeIndicator: {fileID: 0}

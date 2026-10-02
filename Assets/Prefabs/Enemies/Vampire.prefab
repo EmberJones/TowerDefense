@@ -563,8 +563,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f474d4babe02e44ad7ea0a5b44a74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 150
-  currentHealthValue: 150
+  maxHealth: 250
+  currentHealthValue: 250
   damageReductionMultiplier: 1
 --- !u!64 &2080910260937986882
 MeshCollider:

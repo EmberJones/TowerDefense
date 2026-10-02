@@ -202,7 +202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 08713d490846ad540aa3268abe3e028a, type: 3}
       propertyPath: m_Name
-      value: zombie 1 rig (1)
+      value: Zombie
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 08713d490846ad540aa3268abe3e028a, type: 3}
       propertyPath: m_Layer
@@ -385,8 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f474d4babe02e44ad7ea0a5b44a74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 15
-  currentHealthValue: 15
+  maxHealth: 20
+  currentHealthValue: 20
   damageReductionMultiplier: 1
 --- !u!64 &2532622932660452745
 MeshCollider:

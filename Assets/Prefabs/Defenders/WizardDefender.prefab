@@ -289,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 0
   attackRange: 12
-  attackInterval: 1.6
+  attackInterval: 2
   attackDamage: 10
   targetLayer:
     serializedVersion: 2
@@ -299,7 +299,7 @@ MonoBehaviour:
   projectileSpeed: 15
   deferRangedResolution: 0
   showRangeIndicator: 1
-  rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}
+  rangeColor: {r: 0.16135636, g: 0.2338911, b: 0.6981132, a: 1}
   rangeLineWidth: 0.05
   rangeSegments: 64
   rangeIndicator: {fileID: 0}
