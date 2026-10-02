@@ -258,15 +258,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -15.448169
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6668566
+      value: 1.6858656
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.813991
+      value: -2.0316768
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_LocalRotation.w
@@ -484,6 +484,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_Controller
       value: 
@@ -592,7 +604,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  projectilePrefab: {fileID: 919132149155446097, guid: 376aa55cec79c2a4481e66cf9e45d993, type: 3}
+  projectilePrefab: {fileID: 5775057987688941758, guid: 953f13dc255455347b27e66c2dfa20cf, type: 3}
   firePoint: {fileID: 4616768949021526531}
   projectileSpeed: 10
   deferRangedResolution: 0

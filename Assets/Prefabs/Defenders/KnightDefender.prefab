@@ -192,15 +192,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.1789398
+      value: -15.12901
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6148349
+      value: 1.8911871
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.42578
+      value: -4.38049
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalRotation.w
@@ -438,10 +438,26 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465940246521907071, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 338daf0fea7db6244b4e9f0ff76fa86e, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7363479242261063072, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -529,14 +545,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
-  attackType: 1
+  attackType: 0
   attackRange: 8
   attackInterval: 2
   attackDamage: 6
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  projectilePrefab: {fileID: 919132149155446097, guid: ecc895781f4e2384f84a0906e885d7ab, type: 3}
+  projectilePrefab: {fileID: 5775057987688941758, guid: 953f13dc255455347b27e66c2dfa20cf, type: 3}
   firePoint: {fileID: 8042380158931682752}
   projectileSpeed: 25
   deferRangedResolution: 0

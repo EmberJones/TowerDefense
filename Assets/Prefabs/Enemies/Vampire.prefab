@@ -281,7 +281,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5775057987688941758, guid: 953f13dc255455347b27e66c2dfa20cf, type: 3}
   firePoint: {fileID: 5300007587084508949}
   projectileSpeed: 20
   deferRangedResolution: 0

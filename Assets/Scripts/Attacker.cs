@@ -116,7 +116,7 @@ public class Attacker : MonoBehaviour
         if (projectilePrefab != null)
         {
             Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
-            GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+            GameObject proj = Instantiate(projectilePrefab, spawnPos, transform.rotation);
             Projectile projectile = proj.GetComponent<Projectile>();
             if (projectile != null)
                 projectile.Initialize(target, attackDamage, projectileSpeed, HandleHit);

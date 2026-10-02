@@ -50546,7 +50546,7 @@ AnimationClip:
   - time: 0.6333333
     functionName: ResolveAttack
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: bdc83f9d9156a6c498b8545b53babfd7, type: 3}
+    objectReferenceParameter: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
