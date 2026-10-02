@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.915781
+      value: -10.559121
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.7201958
+      value: 1.7176526
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.12352
+      value: 15.300363
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 500
   currentHealthValue: 500
+  damageReductionMultiplier: 1
 --- !u!114 &9159482328499207708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 0
-  attackRange: 16
+  attackRange: 12
   attackInterval: 1
   attackDamage: 5
   targetLayer:

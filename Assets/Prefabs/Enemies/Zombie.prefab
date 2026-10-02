@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3253095559193772908}
   - component: {fileID: 3292105750125326785}
   m_Layer: 6
-  m_Name: Enemy
+  m_Name: Zombie
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,6 +59,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   heightOffset: 0.5
+  ignoreDefenders: 0
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  projectileSpeed: 15
 --- !u!114 &-1794406250409812443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 1
-  attackRange: 12
+  attackRange: 4
   attackInterval: 1
   attackDamage: 5
   targetLayer:
@@ -81,7 +85,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   firePoint: {fileID: 3229781322882976381}
   projectileSpeed: 20
-  showRangeIndicator: 1
+  showRangeIndicator: 0
   rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}
   rangeLineWidth: 0.05
   rangeSegments: 64
@@ -100,6 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Health
   maxHealth: 15
   currentHealthValue: 15
+  damageReductionMultiplier: 1
 --- !u!64 &7251528945924206644
 MeshCollider:
   m_ObjectHideFlags: 0

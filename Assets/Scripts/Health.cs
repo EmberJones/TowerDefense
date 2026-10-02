@@ -6,6 +6,8 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private int currentHealthValue;
 
+    public float damageReductionMultiplier = 1f;
+
     public int CurrentHealth
     {
         get => currentHealthValue;
@@ -32,7 +34,8 @@ public class Health : MonoBehaviour, IDamageable
     {
         if (isDead) return;
 
-        currentHealthValue = Mathf.Max(currentHealthValue - damageAmount, 0);
+        int adjustedDamage = Mathf.RoundToInt(damageAmount * damageReductionMultiplier);
+        currentHealthValue = Mathf.Max(currentHealthValue - adjustedDamage, 0);
         OnHealthChanged?.Invoke(currentHealthValue, maxHealth);
 
         if (currentHealthValue <= 0)

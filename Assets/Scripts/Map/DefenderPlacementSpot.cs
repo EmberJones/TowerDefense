@@ -20,7 +20,7 @@ public class DefenderPlacementSpot : MonoBehaviour
     {
         if (IsOccupied || defenderFactory == null) return;
 
-        defenderFactory.CreateDefender(type, transform.position);
+        defenderFactory.CreateTower(type, transform.position);
         IsOccupied = true;
 
         Collider col = GetComponent<Collider>();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,12 +12,20 @@ public class Enemy : MonoBehaviour
     public LayerMask targetLayer;
     public float heightOffset = 0.5f;
 
+    public bool ignoreDefenders = false;
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public float projectileSpeed = 15f;
+
+    public event Action OnReachedMainTower;
+
     private List<Vector3> waypoints;
     private int waypointIndex;
     private TerrainGenerator terrainGenerator;
     private Health health;
     private Transform currentTarget;
     private float attackTimer;
+    private bool reachedTowerReported;
 
     public void Initialize(List<Vector3> path, TerrainGenerator terrain)
     {
@@ -88,6 +97,9 @@ public class Enemy : MonoBehaviour
 
         foreach (var hit in hits)
         {
+            if (ignoreDefenders && hit.GetComponent<Defender>() != null)
+                continue;
+
             float d = Vector3.Distance(transform.position, hit.transform.position);
             if (d < closestDist)
             {
@@ -111,12 +123,34 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        if (!reachedTowerReported && currentTarget.GetComponent<MainTower>() != null)
+        {
+            reachedTowerReported = true;
+            OnReachedMainTower?.Invoke();
+        }
+
         attackTimer -= Time.deltaTime;
         if (attackTimer <= 0f)
         {
-            IDamageable damageable = currentTarget.GetComponent<IDamageable>();
-            damageable?.TakeDamage(attackDamage);
+            PerformAttack(currentTarget);
             attackTimer = attackInterval;
+        }
+    }
+
+    private void PerformAttack(Transform target)
+    {
+        if (projectilePrefab != null)
+        {
+            Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
+            GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+            Projectile projectile = proj.GetComponent<Projectile>();
+            if (projectile != null)
+                projectile.Initialize(target, attackDamage, projectileSpeed);
+        }
+        else
+        {
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            damageable?.TakeDamage(attackDamage);
         }
     }
 

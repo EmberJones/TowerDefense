@@ -3,17 +3,18 @@ using UnityEngine;
 
 public class DefenderFactory : MonoBehaviour
 {
-    public enum DefenderType { Wizard, Witch, Bard, Barbarian, Knight}
+    public enum DefenderType { Wizard, Knight, Archer }
 
     [System.Serializable]
-    public struct DefenderEntry
+    public struct TowerEntry
     {
         public DefenderType type;
         public GameObject prefab;
     }
 
-    public List<DefenderEntry> defenderPrefabs;
-    public Defender CreateDefender(DefenderType type, Vector3 position)
+    public List<TowerEntry> towerPrefabs;
+
+    public Defender CreateTower(DefenderType type, Vector3 position)
     {
         GameObject prefab = GetPrefab(type);
         if (prefab == null) return null;
@@ -24,7 +25,7 @@ public class DefenderFactory : MonoBehaviour
 
     private GameObject GetPrefab(DefenderType type)
     {
-        foreach (var entry in defenderPrefabs)
+        foreach (var entry in towerPrefabs)
         {
             if (entry.type == type)
                 return entry.prefab;
