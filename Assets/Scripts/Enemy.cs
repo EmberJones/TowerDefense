@@ -158,4 +158,9 @@ public class Enemy : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
 }
