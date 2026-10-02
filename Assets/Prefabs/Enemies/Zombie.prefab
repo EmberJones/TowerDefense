@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   moveSpeed: 3
-  attackRange: 2
+  attackRange: 6
   attackInterval: 1
   attackDamage: 10
   targetLayer:
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 1
-  attackRange: 4
+  attackRange: 6
   attackInterval: 1
   attackDamage: 5
   targetLayer:

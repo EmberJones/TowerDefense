@@ -20,18 +20,33 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("<color=cyan>[WaveManager]</color> Start() called. Beginning RunWaves coroutine.");
         StartCoroutine(RunWaves());
     }
 
     private IEnumerator RunWaves()
     {
+        Debug.Log("<color=cyan>[WaveManager]</color> RunWaves coroutine started.");
+
         while (GameManager.Instance == null || !GameManager.Instance.IsGameOver)
         {
             waveNumber++;
+            Debug.Log($"<color=yellow>[WaveManager]</color> ===== WAVE {waveNumber} STARTING ===== " +
+                      $"(difficultyMultiplier={difficultyMultiplier:F2})");
+
             yield return StartCoroutine(SpawnWave());
+
+            Debug.Log($"<color=yellow>[WaveManager]</color> ===== WAVE {waveNumber} SPAWNING COMPLETE ===== " +
+                      $"(killed={enemiesKilledThisWave}, leaked={enemiesLeakedThisWave})");
+
             AdjustDifficulty();
+
+            Debug.Log($"<color=orange>[WaveManager]</color> Wave {waveNumber} ended. " +
+                      $"Waiting {timeBetweenWaves}s before next wave...");
             yield return new WaitForSeconds(timeBetweenWaves);
         }
+
+        Debug.Log("<color=red>[WaveManager]</color> RunWaves loop exited (game over or GameManager missing).");
     }
 
     private IEnumerator SpawnWave()
@@ -42,9 +57,16 @@ public class WaveManager : MonoBehaviour
         int enemyCount = Mathf.RoundToInt((baseEnemiesPerWave + waveNumber * enemiesPerWaveGrowth) * difficultyMultiplier);
         float interval = baseSpawnInterval / Mathf.Max(difficultyMultiplier, 0.5f);
 
+        Debug.Log($"<color=cyan>[WaveManager]</color> Wave {waveNumber} config: " +
+                  $"enemyCount={enemyCount}, spawnInterval={interval:F2}s, " +
+                  $"baseEnemies={baseEnemiesPerWave}, growth={enemiesPerWaveGrowth}, diffMult={difficultyMultiplier:F2}");
+
         for (int i = 0; i < enemyCount; i++)
         {
-            SpawnEnemy(PickEnemyType());
+            EnemyFactory.EnemyType type = PickEnemyType();
+            Debug.Log($"<color=green>[WaveManager]</color> Wave {waveNumber} spawning enemy {i + 1}/{enemyCount} " +
+                      $"of type <b>{type}</b>");
+            SpawnEnemy(type);
             yield return new WaitForSeconds(interval);
         }
     }
@@ -55,14 +77,25 @@ public class WaveManager : MonoBehaviour
         float rusherChance = Mathf.Clamp01((waveNumber - 4) * 0.06f);
 
         float roll = Random.value;
-        if (roll < rusherChance) return EnemyFactory.EnemyType.Ghost;
-        if (roll < rusherChance + rangedChance) return EnemyFactory.EnemyType.Vampire;
-        return EnemyFactory.EnemyType.Zombie;
+        EnemyFactory.EnemyType chosen;
+        if (roll < rusherChance) chosen = EnemyFactory.EnemyType.Ghost;
+        else if (roll < rusherChance + rangedChance) chosen = EnemyFactory.EnemyType.Vampire;
+        else chosen = EnemyFactory.EnemyType.Zombie;
+
+        Debug.Log($"<color=grey>[WaveManager]</color> PickEnemyType: wave={waveNumber}, " +
+                  $"roll={roll:F2}, rusherChance={rusherChance:F2}, rangedChance={rangedChance:F2} " +
+                  $"=> {chosen}");
+
+        return chosen;
     }
 
     private void SpawnEnemy(EnemyFactory.EnemyType type)
     {
-        if (pathGenerator.Paths == null || pathGenerator.Paths.Count == 0) return;
+        if (pathGenerator.Paths == null || pathGenerator.Paths.Count == 0)
+        {
+            Debug.LogWarning("<color=red>[WaveManager]</color> SpawnEnemy aborted: no paths available!");
+            return;
+        }
 
         var path = pathGenerator.Paths[nextPathIndex];
         nextPathIndex = (nextPathIndex + 1) % pathGenerator.Paths.Count;
@@ -70,14 +103,38 @@ public class WaveManager : MonoBehaviour
         Vector3 spawnPos = path.SampledPoints[0];
         spawnPos.y = terrainGenerator.SampleHeight(spawnPos.x, spawnPos.z);
 
-        Enemy enemy = enemyFactory.CreateEnemy(type, spawnPos, path.SampledPoints, terrainGenerator);
-        if (enemy == null) return;
+        Debug.Log($"<color=green>[WaveManager]</color> Spawning {type} at {spawnPos} on path index " +
+                  $"{(nextPathIndex == 0 ? pathGenerator.Paths.Count - 1 : nextPathIndex - 1)}");
 
-        enemy.OnReachedMainTower += () => enemiesLeakedThisWave++;
+        Enemy enemy = enemyFactory.CreateEnemy(type, spawnPos, path.SampledPoints, terrainGenerator);
+        if (enemy == null)
+        {
+            Debug.LogError("<color=red>[WaveManager]</color> EnemyFactory returned null! Enemy not spawned.");
+            return;
+        }
+
+        enemy.OnReachedMainTower += () =>
+        {
+            enemiesLeakedThisWave++;
+            Debug.Log($"<color=magenta>[WaveManager]</color> Enemy LEAKED to main tower! " +
+                      $"Wave {waveNumber} leaks so far: {enemiesLeakedThisWave}");
+        };
 
         Health health = enemy.GetComponent<Health>();
         if (health != null)
-            health.OnDeath += () => enemiesKilledThisWave++;
+        {
+            health.OnDeath += () =>
+            {
+                enemiesKilledThisWave++;
+                Debug.Log($"<color=magenta>[WaveManager]</color> Enemy KILLED! " +
+                          $"Wave {waveNumber} kills so far: {enemiesKilledThisWave}");
+            };
+        }
+        else
+        {
+            Debug.LogWarning($"<color=orange>[WaveManager]</color> Spawned {type} has no Health component — " +
+                             "kill tracking will not work for it.");
+        }
     }
 
     private void AdjustDifficulty()
@@ -92,14 +149,38 @@ public class WaveManager : MonoBehaviour
             if (th != null && th.MaxHealth > 0)
                 towerHealthPercent = (float)th.CurrentHealth / th.MaxHealth;
         }
+        else
+        {
+            Debug.LogWarning("<color=orange>[WaveManager]</color> AdjustDifficulty: GameManager or mainTower is null. " +
+                             "Tower health defaulted to 100%.");
+        }
+
+        float previousMultiplier = difficultyMultiplier;
 
         if (leakRatio > 0.3f || towerHealthPercent < 0.4f)
         {
             difficultyMultiplier = Mathf.Max(0.6f, difficultyMultiplier - 0.15f);
+            Debug.Log($"<color=orange>[WaveManager]</color> Difficulty DECREASED because " +
+                      $"(leakRatio={leakRatio:F2} > 0.3 || towerHP={towerHealthPercent:F2} < 0.4). " +
+                      $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
         }
         else if (leakRatio < 0.1f && towerHealthPercent > 0.8f)
         {
             difficultyMultiplier = Mathf.Min(2.5f, difficultyMultiplier + 0.15f);
+            Debug.Log($"<color=lime>[WaveManager]</color> Difficulty INCREASED because " +
+                      $"(leakRatio={leakRatio:F2} < 0.1 && towerHP={towerHealthPercent:F2} > 0.8). " +
+                      $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
         }
+        else
+        {
+            Debug.Log($"<color=grey>[WaveManager]</color> Difficulty UNCHANGED. " +
+                      $"leakRatio={leakRatio:F2}, towerHP={towerHealthPercent:F2}, " +
+                      $"multiplier stays at {difficultyMultiplier:F2}");
+        }
+
+        Debug.Log($"<color=cyan>[WaveManager]</color> AdjustDifficulty summary for wave {waveNumber}: " +
+                  $"killed={enemiesKilledThisWave}, leaked={enemiesLeakedThisWave}, " +
+                  $"totalTracked={totalTracked}, leakRatio={leakRatio:F2}, " +
+                  $"towerHP%={towerHealthPercent:F2}");
     }
 }
