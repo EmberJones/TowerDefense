@@ -16,7 +16,6 @@ public class ZombieAnimation : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        // Auto-wire if not assigned in the Inspector
         if (enemy == null) enemy = GetComponent<Enemy>();
         if (health == null) health = GetComponent<Health>();
     }

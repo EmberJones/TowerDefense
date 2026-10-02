@@ -135,8 +135,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // Unity's == null only catches fully destroyed objects.
-        // Catch disabled / inactive targets and destroyed colliders here.
         if (!currentTarget.gameObject.activeInHierarchy
             || currentTargetCollider == null
             || !currentTargetCollider.enabled)

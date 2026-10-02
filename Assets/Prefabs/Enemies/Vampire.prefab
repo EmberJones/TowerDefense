@@ -550,7 +550,7 @@ MonoBehaviour:
   ignoreDefenders: 1
   projectilePrefab: {fileID: 5775057987688941758, guid: ef56127d0107e88458ff80fc11b7a7f6, type: 3}
   firePoint: {fileID: 6319251108100998966}
-  projectileSpeed: 15
+  projectileSpeed: 5
 --- !u!114 &-7241469577160214397
 MonoBehaviour:
   m_ObjectHideFlags: 0

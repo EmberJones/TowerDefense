@@ -12,8 +12,10 @@ public class WaveManager : MonoBehaviour
     public float enemiesPerWaveGrowth = 1.5f;
     public float timeBetweenWaves = 8f;
 
-    [SerializeField] private float rangedChanceMult = 0.6f;
-    [SerializeField] private float rusherChanceMult = 0.4f;
+    [SerializeField] private float rangedChanceMult = 0.06f;
+    [SerializeField] private float rusherChanceMult = 0.04f;
+    [SerializeField] private float MaxRangedChanceMult = 0.5f;
+    [SerializeField] private float MaxRusherChanceMult = 0.4f;
 
     private int waveNumber;
     private int nextPathIndex;
@@ -62,8 +64,16 @@ public class WaveManager : MonoBehaviour
 
     private EnemyFactory.EnemyType PickEnemyType()
     {
-        float rangedChance = Mathf.Clamp01((waveNumber - 5) * rangedChanceMult);
-        float rusherChance = Mathf.Clamp01((waveNumber - 2) * rusherChanceMult);
+        float rangedChance = Mathf.Clamp((waveNumber - 3) * rangedChanceMult, 0f, MaxRangedChanceMult);
+        float rusherChance = Mathf.Clamp((waveNumber - 1) * rusherChanceMult, 0f, MaxRusherChanceMult);
+
+        float combined = rangedChance + rusherChance;
+        if (combined > 1f)
+        {
+            float scale = 1f / combined;
+            rangedChance *= scale;
+            rusherChance *= scale;
+        }
 
         float roll = Random.value;
         EnemyFactory.EnemyType chosen;
@@ -72,7 +82,7 @@ public class WaveManager : MonoBehaviour
         else chosen = EnemyFactory.EnemyType.Zombie;
 
         Debug.Log($"<color=grey>[WaveManager]</color> PickEnemyType: wave={waveNumber}, " +
-                  $"roll={roll:F2}, rusherChance={rusherChance:F2}, rangedChance={rangedChance:F2} " +
+                  $"roll={roll:F2}, rusher={rusherChance:F2}, ranged={rangedChance:F2} " +
                   $"=> {chosen}");
 
         return chosen;

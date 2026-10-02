@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1193406def78054abf335da5b436e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  moveSpeed: 3
+  moveSpeed: 6
   attackRange: 2
   attackInterval: 0.2
   attackDamage: 1
@@ -62,7 +62,7 @@ MonoBehaviour:
   ignoreDefenders: 1
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 3229781322882976381}
-  projectileSpeed: 15
+  projectileSpeed: 50
 --- !u!114 &4131687766044717844
 MonoBehaviour:
   m_ObjectHideFlags: 0
