@@ -424,6 +424,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -606,7 +610,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: 953f13dc255455347b27e66c2dfa20cf, type: 3}
   firePoint: {fileID: 4616768949021526531}
-  projectileSpeed: 10
+  projectileSpeed: 25
   deferRangedResolution: 0
   showRangeIndicator: 1
   rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}

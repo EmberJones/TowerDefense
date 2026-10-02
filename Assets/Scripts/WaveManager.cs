@@ -12,6 +12,9 @@ public class WaveManager : MonoBehaviour
     public float enemiesPerWaveGrowth = 1.5f;
     public float timeBetweenWaves = 8f;
 
+    public float rangedChance = 1;
+    public float rusherChance = 0.4f;
+
     private int waveNumber;
     private int nextPathIndex;
     private int enemiesLeakedThisWave;
@@ -73,8 +76,8 @@ public class WaveManager : MonoBehaviour
 
     private EnemyFactory.EnemyType PickEnemyType()
     {
-        float rangedChance = Mathf.Clamp01((waveNumber - 2) * 0.08f);
-        float rusherChance = Mathf.Clamp01((waveNumber - 4) * 0.06f);
+        float rangedChance = Mathf.Clamp01((waveNumber - 2) * 0.12f);
+        float rusherChance = Mathf.Clamp01((waveNumber - 4) * 0.20f);
 
         float roll = Random.value;
         EnemyFactory.EnemyType chosen;

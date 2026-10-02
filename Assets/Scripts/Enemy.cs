@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Health))]
 public class Enemy : MonoBehaviour
@@ -24,9 +25,11 @@ public class Enemy : MonoBehaviour
     private TerrainGenerator terrainGenerator;
     private Health health;
     private Transform currentTarget;
+    public Transform CurrentTarget => currentTarget;
+
     private float attackTimer;
     private bool reachedTowerReported;
-
+    public event Action<Transform> OnAttack;
     public void Initialize(List<Vector3> path, TerrainGenerator terrain)
     {
         waypoints = path;
@@ -111,7 +114,7 @@ public class Enemy : MonoBehaviour
         currentTarget = closest;
     }
 
-    private void AttackTarget()
+    public void AttackTarget()
     {
         if (currentTarget == null)
             return;
@@ -139,18 +142,21 @@ public class Enemy : MonoBehaviour
 
     private void PerformAttack(Transform target)
     {
+        OnAttack?.Invoke(target);
         if (projectilePrefab != null)
         {
             Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
-            GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+            GameObject proj = Instantiate(projectilePrefab, spawnPos, transform.rotation);
             Projectile projectile = proj.GetComponent<Projectile>();
             if (projectile != null)
                 projectile.Initialize(target, attackDamage, projectileSpeed);
+            Debug.Log($"Enemy {gameObject.name} attacked {target.name} with a projectile.");
         }
         else
         {
             IDamageable damageable = target.GetComponent<IDamageable>();
             damageable?.TakeDamage(attackDamage);
+            Debug.Log($"Enemy {gameObject.name} attacked {target.name} with no projectile.");
         }
     }
 

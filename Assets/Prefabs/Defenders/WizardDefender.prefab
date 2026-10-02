@@ -296,7 +296,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 6827016807495407864}
-  projectileSpeed: 25
+  projectileSpeed: 15
   deferRangedResolution: 0
   showRangeIndicator: 1
   rangeColor: {r: 1, g: 0.85, b: 0, a: 0.35}

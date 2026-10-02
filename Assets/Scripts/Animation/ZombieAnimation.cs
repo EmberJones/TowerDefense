@@ -1,13 +1,13 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class ArcherAnimator : MonoBehaviour
+public class ZombieAnimation : MonoBehaviour
 {
-    [SerializeField] private Attacker attacker;
+    [SerializeField] private Enemy enemy;
     [SerializeField] private Health health;
     [SerializeField] private float rotationSpeed = 10f;
 
-    private static readonly int AttackTrigger = Animator.StringToHash("Aim");
+    private static readonly int AttackTrigger = Animator.StringToHash("Attack");
     private static readonly int DieTrigger = Animator.StringToHash("Die");
 
     private Animator animator;
@@ -15,12 +15,16 @@ public class ArcherAnimator : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
+        // Auto-wire if not assigned in the Inspector
+        if (enemy == null) enemy = GetComponent<Enemy>();
+        if (health == null) health = GetComponent<Health>();
     }
 
     private void Start()
     {
-        if (attacker != null)
-            attacker.OnAttack += HandleAttack;
+        if (enemy != null)
+            enemy.OnAttack += HandleAttack;
 
         if (health != null)
             health.OnDeath += HandleDeath;
@@ -28,8 +32,8 @@ public class ArcherAnimator : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (attacker != null)
-            attacker.OnAttack -= HandleAttack;
+        if (enemy != null)
+            enemy.OnAttack -= HandleAttack;
 
         if (health != null)
             health.OnDeath -= HandleDeath;
@@ -39,20 +43,15 @@ public class ArcherAnimator : MonoBehaviour
     {
         FaceCurrentTarget();
     }
-
     private void FaceCurrentTarget()
     {
-        if (attacker == null || attacker.CurrentTarget == null)
-            return;
+        if (enemy == null || enemy.CurrentTarget == null) return;
 
-        Vector3 direction = attacker.CurrentTarget.position - transform.position;
-        direction.y = 0f;
+        Vector3 dir = enemy.CurrentTarget.position - transform.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.0001f) return;
 
-        if (direction.sqrMagnitude < 0.0001f)
-            return;
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.LookRotation(dir); 
     }
 
     private void HandleAttack(Transform target)
@@ -64,7 +63,7 @@ public class ArcherAnimator : MonoBehaviour
     {
         animator.SetTrigger(DieTrigger);
 
-        if (attacker != null)
-            attacker.enabled = false;
+        if (enemy != null)
+            enemy.enabled = false;
     }
 }
