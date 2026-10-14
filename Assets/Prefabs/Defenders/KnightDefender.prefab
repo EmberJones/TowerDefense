@@ -192,15 +192,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.12901
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.8911871
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.38049
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalRotation.w
@@ -362,10 +362,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1082271958561512970, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_LocalScale.x
       value: 10
@@ -460,7 +456,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 338daf0fea7db6244b4e9f0ff76fa86e, type: 2}
     - target: {fileID: 5866666021909216657, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7363479242261063072, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       propertyPath: m_Layer
@@ -549,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a513e0644b27c7498fe2dde9392ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
-  attackType: 0
+  attackType: 1
   attackRange: 8
   attackInterval: 2
   attackDamage: 6
@@ -561,7 +557,7 @@ MonoBehaviour:
   projectileSpeed: 25
   deferRangedResolution: 0
   showRangeIndicator: 1
-  rangeColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.35}
+  rangeColor: {r: 0.5169811, g: 0.13174237, b: 0.12388036, a: 0.35}
   rangeLineWidth: 0.05
   rangeSegments: 64
   rangeIndicator: {fileID: 0}
@@ -600,6 +596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Defender
   respawnDelay: 5
+  spawnOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &-7902789919105866512
 MonoBehaviour:
   m_ObjectHideFlags: 0

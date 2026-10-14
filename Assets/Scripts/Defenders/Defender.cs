@@ -12,6 +12,7 @@ public class Defender : MonoBehaviour
     private TowerUpgradeTree upgradeTree;
     private Collider towerCollider;
     private Renderer[] renderers;
+    public Vector3 spawnOffset = Vector3.zero;
 
     private void Awake()
     {

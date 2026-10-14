@@ -58,7 +58,7 @@ public class DefenderPlacementManager : MonoBehaviour
             if (tooClose) continue;
 
             float y = terrainGenerator.SampleHeight(x, z);
-            Vector3 spotPos = new Vector3(x, y, z);
+            Vector3 spotPos = new Vector3(x, y+0.1f, z);
 
             GameObject spotObj = spotMarkerPrefab != null
                 ? Instantiate(spotMarkerPrefab, spotPos, Quaternion.identity, transform)

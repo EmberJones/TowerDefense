@@ -18,8 +18,9 @@ public class DefenderFactory : MonoBehaviour
     {
         GameObject prefab = GetPrefab(type);
         if (prefab == null) return null;
+        Vector3 offset = prefab.GetComponent<Defender>().spawnOffset;
 
-        GameObject instance = Instantiate(prefab, position, Quaternion.identity);
+        GameObject instance = Instantiate(prefab, position + offset, Quaternion.identity);
         return instance.GetComponent<Defender>();
     }
 
