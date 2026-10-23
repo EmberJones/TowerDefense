@@ -39,7 +39,7 @@ Material:
     - _PathThreshold: 0.169
     - _RootDarken: 0.15
     - _Saturation: 0.9
-    - _TipLighten: 0.1
+    - _TipLighten: 0.407
     - _WindFrequency: 0.35
     - _WindLean: 0.03
     - _WindSpeed: 0.25
