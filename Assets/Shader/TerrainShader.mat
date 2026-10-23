@@ -27,7 +27,7 @@ Material:
     m_Floats:
     - _AmbientStrength: 1
     - _Bands: 4
-    - _CellSize: 1
+    - _CellSize: 0.35
     - _EdgeNoise: 0.344
     - _FaceVariation: 0.108
     - _PatchScale: 0.04

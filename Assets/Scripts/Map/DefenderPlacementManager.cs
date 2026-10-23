@@ -14,6 +14,7 @@ public class DefenderPlacementManager : MonoBehaviour
     public GameObject spotMarkerPrefab;
 
     private List<DefenderPlacementSpot> spots = new List<DefenderPlacementSpot>();
+    public IReadOnlyList<DefenderPlacementSpot> Spots => spots;
 
     public void GenerateSpots()
     {
