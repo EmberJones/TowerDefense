@@ -97,7 +97,9 @@ public class TerrainGenerator : MonoBehaviour
 
                 vertices[index] = new Vector3(worldX, height, worldZ);
                 uvs[index] = new Vector2(x / (float)resolution, z / (float)resolution);
-                colors[index] = Color.Lerp(debugPlateauColor, debugRiverColor, pathInfluence);
+                colors[index] = useDebugVertexColors
+                    ? Color.Lerp(debugPlateauColor, debugRiverColor, pathInfluence)
+                    : new Color(pathInfluence, 0f, 0f, 1f);
             }
         }
 
@@ -124,8 +126,7 @@ public class TerrainGenerator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
-        if (useDebugVertexColors)
-            mesh.colors = colors;
+        mesh.colors = colors;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
