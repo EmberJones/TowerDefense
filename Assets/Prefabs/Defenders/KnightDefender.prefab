@@ -507,6 +507,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7902789919105866512}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7744552794408203120}
   m_SourcePrefab: {fileID: 100100000, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}
 --- !u!4 &4852762498753709778 stripped
 Transform:
@@ -612,6 +615,25 @@ MonoBehaviour:
   attacker: {fileID: 5022762933833392601}
   health: {fileID: 3978419322148189628}
   rotationSpeed: 10
+--- !u!114 &-7744552794408203120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193681044653284456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf475b684ecbb554e801ebc20502ebb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeTree
+  availableUpgrades:
+  - {fileID: 11400000, guid: 757a9a924865a9f4294a2519a6eb6b1c, type: 2}
+  - {fileID: 11400000, guid: af3d11cdd264d944cbc5ba472e865a0d, type: 2}
+  - {fileID: 11400000, guid: 281b13214bc636f4380150f5cebe5469, type: 2}
+  - {fileID: 11400000, guid: 38f2a0c1923e51a48a962b1eca16e82b, type: 2}
+  - {fileID: 11400000, guid: 55383f4bfb4614740874086deaafdd8d, type: 2}
+  - {fileID: 11400000, guid: c868d4526532143489cf74a4ab2cb300, type: 2}
 --- !u!4 &6730467461421588209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 58e654bd8ce0cbc43b41263a874bd698, type: 3}

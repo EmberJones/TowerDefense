@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e3daa5adbb75b4290f1a6188cc2f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CleaveOnHitEffect
-  cleaveRadius: 3
-  cleaveDamage: 10
+  cleaveRadius: 2
+  CleaveMultiplier: 0.55
   targetLayer:
     serializedVersion: 2
     m_Bits: 64

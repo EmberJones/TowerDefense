@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d416f002b159980419b7d26af1fb3b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChainLightningEffect
-  maxChains: 4
-  chainRadius: 5
+  maxChains: 3
+  chainRadius: 3
   chainDamage: 8
   targetLayer:
     serializedVersion: 2
