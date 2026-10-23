@@ -683,4 +683,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf475b684ecbb554e801ebc20502ebb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeTree
-  availableUpgrades: []
+  availableUpgrades:
+  - {fileID: 11400000, guid: dc43ecc003a05cd44b0cd95e9f8be70e, type: 2}
+  - {fileID: 11400000, guid: 7556c24fcfa3adf4693a3c7b522428b5, type: 2}
+  - {fileID: 11400000, guid: 6fb36d3e58396e545b9f4e53c9bf9cd7, type: 2}
+  - {fileID: 11400000, guid: 1c7da959ee269a94a8d42552c605fa82, type: 2}
+  - {fileID: 11400000, guid: a4f1d40c5f1b5fb4ca9f02dfa97754bd, type: 2}
+  - {fileID: 11400000, guid: 3a271dece1611494b86b82b600ff8d31, type: 2}
