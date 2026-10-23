@@ -50,9 +50,9 @@ public class WaveManager : MonoBehaviour
         int enemyCount = Mathf.RoundToInt((baseEnemiesPerWave + waveNumber * enemiesPerWaveGrowth) * difficultyMultiplier);
         float interval = baseSpawnInterval / Mathf.Max(difficultyMultiplier, 0.5f);
 
-        Debug.Log($"<color=cyan>[WaveManager]</color> Wave {waveNumber} config: " +
-                  $"enemyCount={enemyCount}, spawnInterval={interval:F2}s, " +
-                  $"baseEnemies={baseEnemiesPerWave}, growth={enemiesPerWaveGrowth}, diffMult={difficultyMultiplier:F2}");
+        //Debug.Log($"<color=cyan>[WaveManager]</color> Wave {waveNumber} config: " +
+          //        $"enemyCount={enemyCount}, spawnInterval={interval:F2}s, " +
+            //      $"baseEnemies={baseEnemiesPerWave}, growth={enemiesPerWaveGrowth}, diffMult={difficultyMultiplier:F2}");
 
         for (int i = 0; i < enemyCount; i++)
         {
@@ -81,9 +81,9 @@ public class WaveManager : MonoBehaviour
         else if (roll < rusherChance + rangedChance) chosen = EnemyFactory.EnemyType.Vampire;
         else chosen = EnemyFactory.EnemyType.Zombie;
 
-        Debug.Log($"<color=grey>[WaveManager]</color> PickEnemyType: wave={waveNumber}, " +
-                  $"roll={roll:F2}, rusher={rusherChance:F2}, ranged={rangedChance:F2} " +
-                  $"=> {chosen}");
+        //Debug.Log($"<color=grey>[WaveManager]</color> PickEnemyType: wave={waveNumber}, " +
+        //          $"roll={roll:F2}, rusher={rusherChance:F2}, ranged={rangedChance:F2} " +
+        //          $"=> {chosen}");
 
         return chosen;
     }
@@ -152,27 +152,27 @@ public class WaveManager : MonoBehaviour
         if (leakRatio > 0.3f || towerHealthPercent < 0.4f)
         {
             difficultyMultiplier = Mathf.Max(0.6f, difficultyMultiplier - 0.15f);
-            Debug.Log($"<color=orange>[WaveManager]</color> Difficulty DECREASED because " +
-                      $"(leakRatio={leakRatio:F2} > 0.3 || towerHP={towerHealthPercent:F2} < 0.4). " +
-                      $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
+            //Debug.Log($"<color=orange>[WaveManager]</color> Difficulty DECREASED because " +
+            //          $"(leakRatio={leakRatio:F2} > 0.3 || towerHP={towerHealthPercent:F2} < 0.4). " +
+            //          $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
         }
         else if (leakRatio < 0.1f && towerHealthPercent > 0.8f)
         {
             difficultyMultiplier = Mathf.Min(2.5f, difficultyMultiplier + 0.15f);
-            Debug.Log($"<color=lime>[WaveManager]</color> Difficulty INCREASED because " +
-                      $"(leakRatio={leakRatio:F2} < 0.1 && towerHP={towerHealthPercent:F2} > 0.8). " +
-                      $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
+            //Debug.Log($"<color=lime>[WaveManager]</color> Difficulty INCREASED because " +
+            //          $"(leakRatio={leakRatio:F2} < 0.1 && towerHP={towerHealthPercent:F2} > 0.8). " +
+            //          $"{previousMultiplier:F2} -> {difficultyMultiplier:F2}");
         }
         else
         {
-            Debug.Log($"<color=grey>[WaveManager]</color> Difficulty UNCHANGED. " +
-                      $"leakRatio={leakRatio:F2}, towerHP={towerHealthPercent:F2}, " +
-                      $"multiplier stays at {difficultyMultiplier:F2}");
+            //Debug.Log($"<color=grey>[WaveManager]</color> Difficulty UNCHANGED. " +
+            //          $"leakRatio={leakRatio:F2}, towerHP={towerHealthPercent:F2}, " +
+            //          $"multiplier stays at {difficultyMultiplier:F2}");
         }
 
-        Debug.Log($"<color=cyan>[WaveManager]</color> AdjustDifficulty summary for wave {waveNumber}: " +
-                  $"killed={enemiesKilledThisWave}, leaked={enemiesLeakedThisWave}, " +
-                  $"totalTracked={totalTracked}, leakRatio={leakRatio:F2}, " +
-                  $"towerHP%={towerHealthPercent:F2}");
+        //Debug.Log($"<color=cyan>[WaveManager]</color> AdjustDifficulty summary for wave {waveNumber}: " +
+        //          $"killed={enemiesKilledThisWave}, leaked={enemiesLeakedThisWave}, " +
+        //          $"totalTracked={totalTracked}, leakRatio={leakRatio:F2}, " +
+        //          $"towerHP%={towerHealthPercent:F2}");
     }
 }

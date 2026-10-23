@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
-  m_Name: Coup de grace
+  m_Name: Overwhelming Critical
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
-  upgradeName: Coup de grace
+  upgradeName: Overwhelming Critical
   description: 'Crit damage increases as health decreases
 
 '
