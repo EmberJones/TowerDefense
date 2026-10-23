@@ -648,7 +648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Defender
   respawnDelay: 7
-  spawnOffset: {x: 0, y: 0, z: 0}
+  spawnOffset: {x: 0, y: 0.6, z: 0}
 --- !u!64 &8431023805675393340
 MeshCollider:
   m_ObjectHideFlags: 0
