@@ -24,6 +24,9 @@ public class ComboEchoThorns : MonoBehaviour
     [Tooltip("If true, MR's echo replaces DoubleShot (set base DoubleShot.procChance=0 on the tower).")]
     [SerializeField] private bool suppressBaseDoubleShot = true;
 
+    [Header("Debug")]
+    [SerializeField] private bool debug = true;
+
     private Attacker attacker;
     private EchoAttack baseDoubleShot;
 
@@ -33,10 +36,18 @@ public class ComboEchoThorns : MonoBehaviour
         baseDoubleShot = GetComponentInParent<EchoAttack>();
 
         if (suppressBaseDoubleShot && baseDoubleShot != null)
-            baseDoubleShot.enabled = false; // stop the base echo from double-firing
+        {
+            baseDoubleShot.enabled = false;
+            if (debug)
+                Debug.Log($"[EchoThorns] Suppressed base EchoAttack on '{baseDoubleShot.name}'.");
+        }
 
         if (attacker != null)
             attacker.OnAttack += HandleAttack;
+
+        if (debug)
+            Debug.Log($"[EchoThorns] Awake on '{name}', attacker={(attacker != null ? attacker.name : "NULL")}, " +
+                      $"procChance={procChance}, baseMult={baseMultiplier}, thornsMult={thornsBonusMultiplier}, maxBonus={maxThornsBonus}");
     }
 
     private void OnDestroy()
@@ -50,7 +61,15 @@ public class ComboEchoThorns : MonoBehaviour
     private void HandleAttack(Transform target)
     {
         if (target == null) return;
-        if (Random.value > procChance) return;
+
+        float roll = Random.value;
+        bool proc = roll <= procChance;
+
+        if (debug)
+            Debug.Log($"[EchoThorns] OnAttack target={target.name}, roll={roll:F3} vs procChance={procChance:F3} => {(proc ? "PROC" : "no proc")}");
+
+        if (!proc) return;
+
         StartCoroutine(FireEcho(target));
     }
 
@@ -60,21 +79,47 @@ public class ComboEchoThorns : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         Transform target = originalTarget != null ? originalTarget : attacker.CurrentTarget;
-        if (target == null) yield break;
-        if (Vector3.Distance(transform.position, target.position) > attacker.attackRange) yield break;
+        if (target == null)
+        {
+            if (debug) Debug.Log("[EchoThorns] Aborted: no valid target.");
+            yield break;
+        }
+
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (dist > attacker.attackRange)
+        {
+            if (debug) Debug.Log($"[EchoThorns] Aborted: {target.name} out of range (dist={dist:F2} > range={attacker.attackRange:F2}).");
+            yield break;
+        }
 
         int thornsBonus = 0;
         var status = target.GetComponent<ThornsStatus>();
         if (status != null)
         {
-            thornsBonus = Mathf.RoundToInt(
-                status.DamagePerThorn * status.ThornAmount * thornsBonusMultiplier);
+            int rawBonus = status.DamagePerThorn * status.ThornAmount;
+            thornsBonus = Mathf.RoundToInt(rawBonus * thornsBonusMultiplier);
+
+            if (debug)
+                Debug.Log($"[EchoThorns] Target {target.name}: dpt={status.DamagePerThorn}, stacks={status.ThornAmount}, " +
+                          $"rawBonus={rawBonus}, scaledBonus={thornsBonus} (x{thornsBonusMultiplier})");
         }
+        else if (debug)
+        {
+            Debug.Log($"[EchoThorns] Target {target.name} has NO ThornsStatus component — thorns bonus = 0.");
+        }
+
         if (maxThornsBonus > 0 && thornsBonus > maxThornsBonus)
+        {
+            if (debug)
+                Debug.Log($"[EchoThorns] Thorns bonus capped: {thornsBonus} -> {maxThornsBonus}");
             thornsBonus = maxThornsBonus;
+        }
 
         int baseDamage = Mathf.Max(1, Mathf.RoundToInt(attacker.attackDamage * baseMultiplier));
         int totalDamage = baseDamage + thornsBonus;
+
+        if (debug)
+            Debug.Log($"[EchoThorns] Firing echo at {target.name}: base={baseDamage}, thornsBonus={thornsBonus}, TOTAL={totalDamage}, type={attacker.attackType}");
 
         int originalDamage = attacker.attackDamage;
         attacker.attackDamage = totalDamage;

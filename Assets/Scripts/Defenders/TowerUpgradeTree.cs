@@ -11,7 +11,19 @@ public class TowerUpgradeTree : MonoBehaviour
     private HashSet<UpgradeSlot> selectedSlots = new HashSet<UpgradeSlot>();
     private Attacker attacker;
     private Health health;
+    private void OnValidate()
+    {
+        if (availableUpgrades == null) return;
 
+        var seen = new HashSet<UpgradeSlot>();
+        foreach (var def in availableUpgrades)
+        {
+            if (def == null) continue;
+            if (!seen.Add(def.slot))
+                Debug.LogError($"[TowerUpgradeTree] Duplicate slot '{def.slot}' on '{name}' " +
+                               $"({def.name} conflicts with an earlier definition).", this);
+        }
+    }
     private void Awake()
     {
         attacker = GetComponent<Attacker>();

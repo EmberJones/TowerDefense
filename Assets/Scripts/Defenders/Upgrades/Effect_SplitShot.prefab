@@ -49,3 +49,4 @@ MonoBehaviour:
   useConeFilter: 0
   coneHalfAngle: 45
   extraShotDelay: 0
+  debug: 0

@@ -47,3 +47,4 @@ MonoBehaviour:
   extraEchoChance: 0.5
   echoDelay: 0.1
   echoDamageMultiplier: 1
+  debug: 0

@@ -4,26 +4,28 @@ using UnityEngine;
 public class SplitShot : MonoBehaviour
 {
     [SerializeField] private int totalTargets = 2;
-
     [SerializeField] private float extraSearchRadius = 0f;
-
     [SerializeField] private bool useConeFilter = true;
-
     [SerializeField] private float coneHalfAngle = 45f;
-
-    //delay is ranged only
     [SerializeField] private float extraShotDelay = 0.07f;
+
+    [Header("Debug")]
+    [SerializeField] private bool debug = true;
 
     public event System.Action<Transform> OnExtraShotFired;
 
     private Attacker attacker;
     private readonly List<Transform> extraTargets = new List<Transform>();
     private bool resolvePending = false;
+
     private void Awake()
     {
         attacker = GetComponentInParent<Attacker>();
         if (attacker != null)
             attacker.OnAttack += HandleAttack;
+
+        if (debug)
+            Debug.Log($"[SplitShot] Awake on '{name}', attacker={(attacker != null ? attacker.name : "NULL")}, totalTargets={totalTargets}");
     }
 
     private void OnDestroy()
@@ -38,31 +40,37 @@ public class SplitShot : MonoBehaviour
 
         CollectExtraTargets(primary);
 
+        if (debug)
+            Debug.Log($"[SplitShot] Attack on primary={primary.name}, collected {extraTargets.Count} extra target(s).");
+
         if (extraTargets.Count == 0) return;
 
-        // Melee resolves immediately; ranged deferred flows through ResolveAttack.
         if (attacker.attackType == Attacker.AttackType.Melee)
         {
-            // Melee: ResolveAttack will be called by the animation event for the primary.
-            // We queue extra strikes to fire at the same resolve moment.
             resolvePending = true;
+            if (debug) Debug.Log("[SplitShot] Melee: extras queued for ResolveAttack.");
         }
         else if (attacker.deferRangedResolution)
         {
-            // Ranged with animation-event deferral: wait for ResolveAttack.
             resolvePending = true;
+            if (debug) Debug.Log("[SplitShot] Ranged (deferred): extras queued for ResolveAttack.");
         }
         else
         {
-            // Immediate ranged: fire extra projectiles right away.
+            if (debug) Debug.Log("[SplitShot] Ranged (immediate): firing extras now.");
             FireExtras();
         }
     }
 
     public void ResolveExtraTargets()
     {
-        if (!resolvePending) return;
+        if (!resolvePending)
+        {
+            if (debug) Debug.Log("[SplitShot] ResolveExtraTargets called but nothing pending.");
+            return;
+        }
         resolvePending = false;
+        if (debug) Debug.Log("[SplitShot] ResolveExtraTargets -> firing queued extras.");
         FireExtras();
     }
 
@@ -71,9 +79,14 @@ public class SplitShot : MonoBehaviour
         if (extraTargets.Count == 0) return;
 
         if (extraShotDelay > 0f && attacker.attackType == Attacker.AttackType.Ranged)
+        {
+            if (debug) Debug.Log($"[SplitShot] Delaying extras by {extraShotDelay}s.");
             StartCoroutine(FireExtrasDelayed());
+        }
         else
+        {
             FireExtrasNow();
+        }
     }
 
     private System.Collections.IEnumerator FireExtrasDelayed()
@@ -93,7 +106,10 @@ public class SplitShot : MonoBehaviour
 
             if (Vector3.Distance(transform.position, t.position) >
                 attacker.attackRange + extraSearchRadius)
+            {
+                if (debug) Debug.Log($"[SplitShot] Extra {t.name} skipped: out of range.");
                 continue;
+            }
 
             if (attacker.attackType == Attacker.AttackType.Melee)
             {
@@ -101,11 +117,15 @@ public class SplitShot : MonoBehaviour
                 dmg?.TakeDamage(attacker.attackDamage);
                 attacker.SendMessage("HandleHit", t, SendMessageOptions.DontRequireReceiver);
                 OnExtraShotFired?.Invoke(t);
+
+                if (debug) Debug.Log($"[SplitShot] Melee extra hit {t.name} for {attacker.attackDamage}, event fired.");
             }
             else
             {
                 attacker.SendMessage("FireRanged", t, SendMessageOptions.DontRequireReceiver);
                 OnExtraShotFired?.Invoke(t);
+
+                if (debug) Debug.Log($"[SplitShot] Ranged extra fired at {t.name}, event fired.");
             }
         }
     }
@@ -114,7 +134,11 @@ public class SplitShot : MonoBehaviour
     {
         extraTargets.Clear();
         int needed = Mathf.Max(0, totalTargets - 1);
-        if (needed == 0) return;
+        if (needed == 0)
+        {
+            if (debug) Debug.Log("[SplitShot] totalTargets<=1, no extras needed.");
+            return;
+        }
 
         float radius = attacker.attackRange + extraSearchRadius;
         Collider[] hits = Physics.OverlapSphere(transform.position, radius, attacker.targetLayer);
@@ -124,7 +148,6 @@ public class SplitShot : MonoBehaviour
         if (forward.sqrMagnitude < 0.0001f) forward = transform.forward;
         forward.Normalize();
 
-        // Collect candidates with distance, excluding primary.
         var candidates = new List<(Transform t, float d)>();
         foreach (var hit in hits)
         {
@@ -150,5 +173,13 @@ public class SplitShot : MonoBehaviour
 
         for (int i = 0; i < candidates.Count && extraTargets.Count < needed; i++)
             extraTargets.Add(candidates[i].t);
+
+        if (debug)
+        {
+            string list = extraTargets.Count > 0
+                ? string.Join(", ", extraTargets.ConvertAll(t => t != null ? t.name : "null"))
+                : "(none)";
+            Debug.Log($"[SplitShot] Candidate search radius={radius:F2}, found {candidates.Count} candidate(s), picked {extraTargets.Count}: {list}");
+        }
     }
 }

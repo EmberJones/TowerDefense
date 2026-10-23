@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 0
-  attackRange: 12
+  attackRange: 10
   attackInterval: 2
   attackDamage: 10
   targetLayer:
@@ -296,7 +296,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 6827016807495407864}
-  projectileSpeed: 8
+  projectileSpeed: 10
   deferRangedResolution: 0
   showRangeIndicator: 1
   rangeColor: {r: 0.16135636, g: 0.2338911, b: 0.6981132, a: 1}

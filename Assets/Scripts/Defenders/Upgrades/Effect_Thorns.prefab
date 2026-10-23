@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Thorns
   damagePerThorn: 1
   thornAmount: 1
+  suppressNormalApplication: 0
+  debug: 0

@@ -70,6 +70,15 @@ public class UpgradeUI : MonoBehaviour
     {
         if (currentTree == null) return;
 
+        // If two base slots are already chosen, hide ALL base buttons and show combo only.
+        // Otherwise, show base buttons (SetButtonState hides the ones already picked).
+        int selectedBaseCount = GetSelectedBaseCount();
+        bool baseLocked = selectedBaseCount >= 2;
+
+        SetButtonVisibility(leftButton, UpgradeSlot.Left, baseLocked);
+        SetButtonVisibility(middleButton, UpgradeSlot.Middle, baseLocked);
+        SetButtonVisibility(rightButton, UpgradeSlot.Right, baseLocked);
+
         SetButtonState(leftButton, leftIcon, UpgradeSlot.Left);
         SetButtonState(middleButton, middleIcon, UpgradeSlot.Middle);
         SetButtonState(rightButton, rightIcon, UpgradeSlot.Right);
@@ -93,20 +102,40 @@ public class UpgradeUI : MonoBehaviour
             }
         }
     }
-
-    private void SetButtonState(GameObject buttonObj, Image icon, UpgradeSlot slot)
+    private void SetButtonVisibility(GameObject buttonObj, UpgradeSlot slot, bool baseLocked)
     {
         if (buttonObj == null) return;
 
         bool alreadySelected = currentTree.IsSlotSelected(slot);
-        buttonObj.SetActive(!alreadySelected);
+        buttonObj.SetActive(!alreadySelected && !baseLocked);
+    }
+    private int GetSelectedBaseCount()
+    {
+        int count = 0;
+        if (currentTree.IsSlotSelected(UpgradeSlot.Left)) count++;
+        if (currentTree.IsSlotSelected(UpgradeSlot.Middle)) count++;
+        if (currentTree.IsSlotSelected(UpgradeSlot.Right)) count++;
+        return count;
+    }
+    private void SetButtonState(GameObject buttonObj, Image icon, UpgradeSlot slot)
+    {
+        if (buttonObj == null) return;
 
-        if (!alreadySelected && icon != null)
+        if (icon == null) return;
+
+        TowerUpgradeDefinition def = currentTree.FindDefinition(slot);
+        if (def == null)
         {
-            TowerUpgradeDefinition def = currentTree.FindDefinition(slot);
-            if (def != null && def.icon != null)
-                icon.sprite = def.icon;
+            Debug.LogWarning($"[UpgradeUI] No definition for slot {slot}.");
+            return;
         }
+        if (def.icon == null)
+        {
+            Debug.LogWarning($"[UpgradeUI] Definition '{def.name}' for slot {slot} has no icon assigned.");
+            return;
+        }
+
+        icon.sprite = def.icon;
     }
 
     public void PurchaseUpgrade(string slotName)

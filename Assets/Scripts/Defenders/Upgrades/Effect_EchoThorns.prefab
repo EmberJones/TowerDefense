@@ -50,3 +50,4 @@ MonoBehaviour:
   thornsBonusMultiplier: 1
   maxThornsBonus: 0
   suppressBaseDoubleShot: 1
+  debug: 0

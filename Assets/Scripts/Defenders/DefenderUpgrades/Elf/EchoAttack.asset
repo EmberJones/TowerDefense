@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Echo Attack
   description: Attacks have a chance to hit twice.
-  slot: 0
+  slot: 1
   icon: {fileID: 21300000, guid: f6cca816f12ed444e9a7ff94d5c39671, type: 3}
   bonusDamage: 0
   bonusRange: 0

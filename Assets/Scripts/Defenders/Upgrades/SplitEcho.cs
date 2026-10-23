@@ -2,8 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// LM Combo: Echo Attack (DoubleShot) can trigger on every SplitShot extra target.
-/// Requires both SplitShot and DoubleShot to be present on the tower
-/// (via Left + Middle upgrades), OR can be paired with its own copies.
 /// </summary>
 public class SplitEcho : MonoBehaviour
 {
@@ -14,6 +12,9 @@ public class SplitEcho : MonoBehaviour
 
     [SerializeField] private float echoDamageMultiplier = 1f;
 
+    [Header("Debug")]
+    [SerializeField] private bool debug = true;
+
     private Attacker attacker;
     private SplitShot splitShot;
 
@@ -21,8 +22,13 @@ public class SplitEcho : MonoBehaviour
     {
         attacker = GetComponentInParent<Attacker>();
         splitShot = GetComponentInParent<SplitShot>();
+
         if (splitShot != null)
             splitShot.OnExtraShotFired += HandleExtraHit;
+
+        if (debug)
+            Debug.Log($"[SplitEcho] Awake on '{name}', attacker={(attacker != null ? attacker.name : "NULL")}, " +
+                      $"splitShot={(splitShot != null ? splitShot.name : "NULL")}, chance={extraEchoChance}");
     }
 
     private void OnDestroy()
@@ -34,7 +40,15 @@ public class SplitEcho : MonoBehaviour
     private void HandleExtraHit(Transform target)
     {
         if (target == null) return;
-        if (Random.value > extraEchoChance) return;
+
+        float roll = Random.value;
+        bool proc = roll <= extraEchoChance;
+
+        if (debug)
+            Debug.Log($"[SplitEcho] OnExtraShotFired target={target.name}, roll={roll:F3} vs chance={extraEchoChance:F3} => {(proc ? "PROC" : "no proc")}");
+
+        if (!proc) return;
+
         StartCoroutine(FireEcho(target));
     }
 
@@ -43,11 +57,25 @@ public class SplitEcho : MonoBehaviour
         yield return null;
         yield return new WaitForSeconds(echoDelay);
 
-        if (target == null) yield break;
-        if (Vector3.Distance(transform.position, target.position) > attacker.attackRange) yield break;
+        if (target == null)
+        {
+            if (debug) Debug.Log("[SplitEcho] Aborted: target destroyed before echo fired.");
+            yield break;
+        }
+
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (dist > attacker.attackRange)
+        {
+            if (debug) Debug.Log($"[SplitEcho] Aborted: {target.name} out of range (dist={dist:F2} > range={attacker.attackRange:F2}).");
+            yield break;
+        }
 
         int originalDamage = attacker.attackDamage;
         int scaled = Mathf.Max(1, Mathf.RoundToInt(originalDamage * echoDamageMultiplier));
+
+        if (debug)
+            Debug.Log($"[SplitEcho] Firing echo at {target.name}: originalDmg={originalDamage}, scaledDmg={scaled}, type={attacker.attackType}");
+
         attacker.attackDamage = scaled;
 
         if (attacker.attackType == Attacker.AttackType.Melee)
