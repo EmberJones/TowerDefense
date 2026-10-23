@@ -31,7 +31,7 @@ Material:
     - _CellSize: 0.35
     - _EdgeNoise: 0.344
     - _FaceVariation: 0.108
-    - _GustScale: 0.08
+    - _GustScale: 0.51
     - _GustStrength: 0.12
     - _LightInfluence: 0
     - _PatchScale: 0.04
@@ -40,9 +40,9 @@ Material:
     - _RootDarken: 0.15
     - _Saturation: 0.9
     - _TipLighten: 0.407
-    - _WindFrequency: 0.35
+    - _WindFrequency: 0.75
     - _WindLean: 0.03
-    - _WindSpeed: 0.25
+    - _WindSpeed: 1.09
     - _WindStrength: 0.1
     m_Colors:
     - _DirtA: {r: 0.5, g: 0.3799999, b: 0.23999992, a: 1}
