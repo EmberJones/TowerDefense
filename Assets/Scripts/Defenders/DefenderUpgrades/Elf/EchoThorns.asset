@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
-  m_Name: EchoFury
+  m_Name: EchoThorns
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
-  upgradeName: Echo Fury
+  upgradeName: Echo Thorns
   description: 'Echo attacks apply additional thorns '
   slot: 5
   icon: {fileID: 21300000, guid: 7a7ca14143913a1459adcc58324c1a0a, type: 3}
@@ -20,4 +20,4 @@ MonoBehaviour:
   bonusRange: 0
   attackIntervalMultiplier: 1
   bonusMaxHealth: 0
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 694412653877697834, guid: 8394a19c76c25b040b6e40e1352cee54, type: 3}

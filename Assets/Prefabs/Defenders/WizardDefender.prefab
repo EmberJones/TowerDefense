@@ -296,7 +296,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 6827016807495407864}
-  projectileSpeed: 15
+  projectileSpeed: 8
   deferRangedResolution: 0
   showRangeIndicator: 1
   rangeColor: {r: 0.16135636, g: 0.2338911, b: 0.6981132, a: 1}
@@ -372,6 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Defender
   respawnDelay: 15
+  spawnOffset: {x: 0, y: 0, z: 0}
 --- !u!4 &6827016807495407864 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1293157592579415587, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}

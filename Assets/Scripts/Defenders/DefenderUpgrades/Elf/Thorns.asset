@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
-  m_Name: FurySwipes
+  m_Name: Thorns
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Thorns
   description: Consecutive attacks deal increased damage
@@ -20,4 +20,4 @@ MonoBehaviour:
   bonusRange: 0
   attackIntervalMultiplier: 1
   bonusMaxHealth: 0
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 50418711274427032, guid: 1feb4e1aa04df814086ba86bf8a6aef3, type: 3}
