@@ -561,6 +561,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2340635596626796940}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 105972427966639381}
   m_SourcePrefab: {fileID: 100100000, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
 --- !u!4 &794340958172765215 stripped
 Transform:
@@ -648,6 +651,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Defender
   respawnDelay: 7
+  deathAnimationTime: 1.5
   spawnOffset: {x: 0, y: 0.6, z: 0}
 --- !u!64 &8431023805675393340
 MeshCollider:
@@ -690,3 +694,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c7da959ee269a94a8d42552c605fa82, type: 2}
   - {fileID: 11400000, guid: a4f1d40c5f1b5fb4ca9f02dfa97754bd, type: 2}
   - {fileID: 11400000, guid: 3a271dece1611494b86b82b600ff8d31, type: 2}
+--- !u!114 &105972427966639381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6772039324440589453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4987afb567155f843840d022e9fac64f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VFXTarget
