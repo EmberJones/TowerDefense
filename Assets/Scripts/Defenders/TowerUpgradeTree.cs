@@ -79,8 +79,7 @@ public class TowerUpgradeTree : MonoBehaviour
 
         if (health != null && def.bonusMaxHealth != 0)
         {
-            health.MaxHealth += def.bonusMaxHealth;
-            health.CurrentHealth += def.bonusMaxHealth;
+            health.IncreaseMaxHealth(def.bonusMaxHealth);
         }
 
         if (def.effectPrefab != null)
