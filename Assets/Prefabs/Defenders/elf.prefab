@@ -561,9 +561,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2340635596626796940}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -3382890140196029197}
   m_SourcePrefab: {fileID: 100100000, guid: 55803d232a2962043ab29a39a21d1566, type: 3}
 --- !u!4 &794340958172765215 stripped
 Transform:
@@ -699,30 +696,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1c7da959ee269a94a8d42552c605fa82, type: 2}
   - {fileID: 11400000, guid: a4f1d40c5f1b5fb4ca9f02dfa97754bd, type: 2}
   - {fileID: 11400000, guid: 3a271dece1611494b86b82b600ff8d31, type: 2}
---- !u!114 &-3382890140196029197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6772039324440589453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 229503d7ac81617439abf28aba38c726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DefenderUpgradeVisuals
-  targetRenderer: {fileID: 2213890160746146540}
-  materialIndex: 0
-  upgradeMaterials:
-  - upgrade: {fileID: 11400000, guid: dc43ecc003a05cd44b0cd95e9f8be70e, type: 2}
-    material: {fileID: 2100000, guid: 5ea8891b8c305a34987dc3949c3250dd, type: 2}
-  - upgrade: {fileID: 11400000, guid: 7556c24fcfa3adf4693a3c7b522428b5, type: 2}
-    material: {fileID: 2100000, guid: b8090345dda0dbc45b6633285c02dab5, type: 2}
-  - upgrade: {fileID: 11400000, guid: 6fb36d3e58396e545b9f4e53c9bf9cd7, type: 2}
-    material: {fileID: 2100000, guid: d5e8caadd699b2647868434176b55334, type: 2}
-  - upgrade: {fileID: 11400000, guid: 1c7da959ee269a94a8d42552c605fa82, type: 2}
-    material: {fileID: 2100000, guid: 50bc7a9b2dde2bd4f85c0545f8ba28b1, type: 2}
-  - upgrade: {fileID: 11400000, guid: a4f1d40c5f1b5fb4ca9f02dfa97754bd, type: 2}
-    material: {fileID: 2100000, guid: 7ed91b4df8c86c0449b0d3113a023a2c, type: 2}
-  - upgrade: {fileID: 11400000, guid: 3a271dece1611494b86b82b600ff8d31, type: 2}
-    material: {fileID: 2100000, guid: a7d92bde176333643afa3f5f7756f334, type: 2}
