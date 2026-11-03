@@ -3,8 +3,9 @@ using UnityEngine;
 
 /// <summary>
 /// Added automatically by VFXManager to anything with a Health component (enemies, defenders, towers).
-/// Watches the health value, and when it drops asks VFXManager to play the damage effect.
-/// Also does the actual material-swap flash on this object's renderers.
+/// - Watches the health value, and when it drops asks VFXManager to play the damage effect.
+/// - Watches for a BurnStatus and, while one is attached, gives off rising embers.
+/// - Does the actual material-swap flash on this object's renderers.
 /// </summary>
 [DisallowMultipleComponent]
 public class VFXTarget : MonoBehaviour
@@ -12,18 +13,24 @@ public class VFXTarget : MonoBehaviour
     private Health health;
     private float lastHealth;
 
+    private BurnStatus burn;
+    private float emberTimer;
+
     private Renderer[] renderers;
     private Material[][] originalMaterials;
     private Coroutine flashRoutine;
     private bool flashing;
 
-    /// <summary>World-space centre of the visible model, used as the particle spawn point.</summary>
-    public Vector3 CenterPoint
+    /// <summary>True while a BurnStatus is attached to this object.</summary>
+    public bool IsBurning => burn != null;
+
+    /// <summary>World-space bounds of the visible model (meshes and sprites only).</summary>
+    public Bounds WorldBounds
     {
         get
         {
             if (renderers == null || renderers.Length == 0)
-                return transform.position + Vector3.up * 0.5f;
+                return new Bounds(transform.position + Vector3.up * 0.5f, Vector3.one * 0.8f);
 
             Bounds b = default;
             bool has = false;
@@ -33,26 +40,20 @@ public class VFXTarget : MonoBehaviour
                 if (!has) { b = r.bounds; has = true; }
                 else b.Encapsulate(r.bounds);
             }
-            return has ? b.center : transform.position;
+            return has ? b : new Bounds(transform.position, Vector3.one * 0.8f);
         }
     }
+
+    /// <summary>World-space centre of the visible model, used as the particle spawn point.</summary>
+    public Vector3 CenterPoint => WorldBounds.center;
 
     /// <summary>Rough horizontal radius of the model, so particles can start outside it.</summary>
     public float Radius
     {
         get
         {
-            if (renderers == null || renderers.Length == 0) return 0.4f;
-
-            Bounds b = default;
-            bool has = false;
-            foreach (var r in renderers)
-            {
-                if (r == null) continue;
-                if (!has) { b = r.bounds; has = true; }
-                else b.Encapsulate(r.bounds);
-            }
-            return has ? Mathf.Max(0.2f, Mathf.Max(b.extents.x, b.extents.z)) : 0.4f;
+            Bounds b = WorldBounds;
+            return Mathf.Max(0.2f, Mathf.Max(b.extents.x, b.extents.z));
         }
     }
 
@@ -70,13 +71,35 @@ public class VFXTarget : MonoBehaviour
 
     private void Update()
     {
-        if (health == null) return;
+        if (VFXManager.Instance == null) return;
 
-        float current = health.CurrentHealth;
-        if (current < lastHealth && VFXManager.Instance != null)
-            VFXManager.Instance.PlayDamageEffect(this);
+        // Damage flash + particles
+        if (health != null)
+        {
+            float current = health.CurrentHealth;
+            if (current < lastHealth)
+                VFXManager.Instance.PlayDamageEffect(this);
+            lastHealth = current;
+        }
 
-        lastHealth = current;
+        // Burning embers
+        if (burn == null)
+            TryGetComponent(out burn);
+
+        if (burn != null)
+        {
+            emberTimer += Time.deltaTime;
+            float interval = 1f / Mathf.Max(0.1f, VFXManager.Instance.EmberRate);
+            while (emberTimer >= interval)
+            {
+                emberTimer -= interval;
+                VFXManager.Instance.PlayEmbers(WorldBounds, 1);
+            }
+        }
+        else
+        {
+            emberTimer = 0f;
+        }
     }
 
     private void OnDisable()
