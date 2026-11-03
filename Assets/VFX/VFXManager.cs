@@ -2,8 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Central hub for all visual effects. Other scripts call into this (or, for damage and burning,
-/// a VFXTarget does it automatically) instead of owning their own effect code.
+/// Central hub for all visual effects. Other scripts call into this (or, for damage, burning and
+/// bleeding, a VFXTarget does it automatically) instead of owning their own effect code.
 /// To add a new effect: add a public Play___ method here, plus any settings it needs.
 /// </summary>
 public class VFXManager : MonoBehaviour
@@ -43,19 +43,42 @@ public class VFXManager : MonoBehaviour
     [Tooltip("Embers released in one puff each time a burning target takes damage.")]
     [SerializeField] private int emberTickBurst = 5;
 
+    [Header("Bleed Effect (Thorns)")]
+    [SerializeField] private Color bleedFlashColor = new Color(0.9f, 0.05f, 0.05f);
+    [SerializeField] private float bleedFlashDuration = 0.15f;
+    [Tooltip("Each blood chunk picks one of these at random.")]
+    [SerializeField]
+    private Color[] bloodColors =
+    {
+        new Color(0.75f, 0.05f, 0.05f),
+        new Color(0.55f, 0.02f, 0.04f),
+        new Color(0.9f, 0.1f, 0.1f)
+    };
+    [Tooltip("How long a target keeps dripping after a thorn hit (refreshed by each new hit).")]
+    [SerializeField] private float bleedDuration = 2f;
+    [Tooltip("Drips per second while bleeding.")]
+    [SerializeField] private float bloodDripRate = 9f;
+    [SerializeField] private float bloodBurstSpeed = 3f;
+    [SerializeField] private float bloodGravity = 3f;
+    [SerializeField] private Vector2 bloodSize = new Vector2(0.08f, 0.17f);
+
     [Header("Auto Setup")]
     [Tooltip("Automatically adds a VFXTarget to every object with a Health component.")]
     [SerializeField] private bool autoAttachToHealth = true;
     [SerializeField] private float scanInterval = 0.5f;
 
     private Material burnFlashMaterial;
+    private Material bleedFlashMaterial;
     private ParticleSystem hitParticles;
     private ParticleSystem emberParticles;
+    private ParticleSystem bloodParticles;
     private Mesh lowPolyMesh;
 
     public Material FlashMaterial => flashMaterial;
     public float FlashDuration => flashDuration;
     public float EmberRate => emberRate;
+    public float BleedDuration => bleedDuration;
+    public float BloodDripRate => bloodDripRate;
 
     private void Awake()
     {
@@ -69,10 +92,12 @@ public class VFXManager : MonoBehaviour
         if (flashMaterial == null)
             flashMaterial = CreateFlashMaterial(Color.white);
         burnFlashMaterial = CreateFlashMaterial(burnFlashColor);
+        bleedFlashMaterial = CreateFlashMaterial(bleedFlashColor);
 
         lowPolyMesh = CreateLowPolyMesh();
         hitParticles = CreateHitParticleSystem("Hit Particles");
         emberParticles = CreateEmberParticleSystem("Ember Particles");
+        bloodParticles = CreateBloodParticleSystem("Blood Particles");
     }
 
     private void Start()
@@ -105,6 +130,58 @@ public class VFXManager : MonoBehaviour
         {
             target.Flash(flashMaterial, flashDuration);
             PlayBurst(target.CenterPoint, hitParticleColor, hitParticleCount, target.Radius);
+        }
+    }
+
+    /// <summary>
+    /// A thorn hit: red flash and a splash of blood that falls to the ground.
+    /// thornsAdded scales the splash so bigger thorn hits bleed more.
+    /// </summary>
+    public void PlayBleedHit(VFXTarget target, int thornsAdded)
+    {
+        if (target == null) return;
+
+        target.Flash(bleedFlashMaterial, bleedFlashDuration);
+        int count = Mathf.Clamp(6 + thornsAdded * 3, 6, 30);
+        PlayBlood(target.WorldBounds, count, bloodBurstSpeed);
+    }
+
+    /// <summary>
+    /// Emits blood chunks from random points on the model. Each chunk's lifetime is worked out
+    /// from its fall, so it disappears when it reaches the bottom of the model (the ground).
+    /// speed ~3 gives a splash, ~0.3 gives a slow drip.
+    /// </summary>
+    public void PlayBlood(Bounds bounds, int count, float speed)
+    {
+        if (bloodParticles == null) return;
+
+        float gravity = Mathf.Abs(Physics.gravity.y) * bloodGravity;
+        float groundY = bounds.min.y;
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 pos = new Vector3(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y + bounds.size.y * 0.25f, bounds.max.y * 0.95f + bounds.min.y * 0.05f),
+                Random.Range(bounds.min.z, bounds.max.z));
+
+            Vector2 flat = Random.insideUnitCircle * Random.Range(speed * 0.3f, speed);
+            float vy = Random.Range(-0.2f, speed * 0.5f);
+            Vector3 vel = new Vector3(flat.x, vy, flat.y);
+
+            // Time to fall from pos.y to groundY: solve h + vy*t - 0.5*g*t^2 = 0.
+            float h = Mathf.Max(pos.y - groundY, 0.05f);
+            float fallTime = (vy + Mathf.Sqrt(vy * vy + 2f * gravity * h)) / gravity;
+
+            var emit = new ParticleSystem.EmitParams
+            {
+                position = pos,
+                velocity = vel,
+                startSize = Random.Range(bloodSize.x, bloodSize.y),
+                startLifetime = Mathf.Clamp(fallTime, 0.1f, 3f),
+                startColor = PickColor(bloodColors, new Color(0.75f, 0.05f, 0.05f))
+            };
+            bloodParticles.Emit(emit, 1);
         }
     }
 
@@ -160,7 +237,7 @@ public class VFXManager : MonoBehaviour
                 velocity = vel,
                 startSize = Random.Range(emberSize.x, emberSize.y),
                 startLifetime = emberLifetime * Random.Range(0.8f, 1.2f),
-                startColor = PickEmberColor()
+                startColor = PickColor(emberColors, new Color(1f, 0.5f, 0.1f))
             };
             emberParticles.Emit(emit, 1);
         }
@@ -168,11 +245,10 @@ public class VFXManager : MonoBehaviour
 
     // ---------------------------------------------------------------- Setup
 
-    private Color PickEmberColor()
+    private static Color PickColor(Color[] palette, Color fallback)
     {
-        if (emberColors == null || emberColors.Length == 0)
-            return new Color(1f, 0.5f, 0.1f);
-        return emberColors[Random.Range(0, emberColors.Length)];
+        if (palette == null || palette.Length == 0) return fallback;
+        return palette[Random.Range(0, palette.Length)];
     }
 
     private IEnumerator AttachRoutine()
@@ -204,7 +280,7 @@ public class VFXManager : MonoBehaviour
     /// <summary>
     /// A tiny faceted octahedron (a "gem" shape). Each face has its own vertices and its own
     /// brightness baked into the vertex colours, so even with an unlit material it reads as
-    /// flat-shaded low poly rather than a blob.
+    /// flat-shaded low poly rather than a blob. Shared by embers and blood.
     /// </summary>
     private Mesh CreateLowPolyMesh()
     {
@@ -236,7 +312,7 @@ public class VFXManager : MonoBehaviour
             }
         }
 
-        var mesh = new Mesh { name = "LowPolyEmber" };
+        var mesh = new Mesh { name = "LowPolyChunk" };
         mesh.vertices = verts;
         mesh.colors = cols;
         mesh.triangles = tris;
@@ -346,6 +422,49 @@ public class VFXManager : MonoBehaviour
             new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(new Color(1f, 0.35f, 0.2f), 1f) },
             new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.7f), new GradientAlphaKey(0f, 1f) });
         colorOverLife.color = cool;
+
+        var rend = go.GetComponent<ParticleSystemRenderer>();
+        rend.renderMode = ParticleSystemRenderMode.Mesh;
+        rend.mesh = lowPolyMesh;
+        rend.sharedMaterial = CreateParticleMaterial();
+
+        ps.Play();
+        return ps;
+    }
+
+    private ParticleSystem CreateBloodParticleSystem(string objectName)
+    {
+        var go = new GameObject(objectName);
+        go.transform.SetParent(transform);
+
+        var ps = go.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        var main = ps.main;
+        main.loop = true;
+        main.playOnAwake = false;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.gravityModifier = bloodGravity; // blood falls; lifetime is set per particle to end at the ground
+        main.maxParticles = 512;
+
+        main.startRotation3D = true;
+        main.startRotationX = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
+        main.startRotationY = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
+        main.startRotationZ = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
+
+        var emission = ps.emission;
+        emission.enabled = false;
+
+        var shape = ps.shape;
+        shape.enabled = false;
+
+        // Slower tumble than embers: heavier droplets.
+        var rot = ps.rotationOverLifetime;
+        rot.enabled = true;
+        rot.separateAxes = true;
+        rot.x = new ParticleSystem.MinMaxCurve(-2f, 2f);
+        rot.y = new ParticleSystem.MinMaxCurve(-2f, 2f);
+        rot.z = new ParticleSystem.MinMaxCurve(-2f, 2f);
 
         var rend = go.GetComponent<ParticleSystemRenderer>();
         rend.renderMode = ParticleSystemRenderMode.Mesh;

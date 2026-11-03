@@ -5,6 +5,7 @@ using UnityEngine;
 /// Added automatically by VFXManager to anything with a Health component (enemies, defenders, towers).
 /// - Watches the health value, and when it drops asks VFXManager to play the damage effect.
 /// - Watches for a BurnStatus and, while one is attached, gives off rising embers.
+/// - Watches for new thorns on a ThornsStatus and plays a red flash and bleeding.
 /// - Does the actual material-swap flash on this object's renderers.
 /// </summary>
 [DisallowMultipleComponent]
@@ -15,6 +16,11 @@ public class VFXTarget : MonoBehaviour
 
     private BurnStatus burn;
     private float emberTimer;
+
+    private ThornsStatus thorns;
+    private int lastThornAmount;
+    private float bleedTimeLeft;
+    private float dripTimer;
 
     private Renderer[] renderers;
     private Material[][] originalMaterials;
@@ -67,38 +73,85 @@ public class VFXTarget : MonoBehaviour
     {
         if (health != null)
             lastHealth = health.CurrentHealth;
+
+        // If thorns were already on this object before we attached, don't treat them as a new hit.
+        if (TryGetComponent(out thorns))
+            lastThornAmount = thorns.ThornAmount;
     }
 
     private void Update()
     {
-        if (VFXManager.Instance == null) return;
+        var vfx = VFXManager.Instance;
+        if (vfx == null) return;
 
-        // Damage flash + particles
+        // Did a thorn hit land this frame? ThornsStatus never fires an event and keeps
+        // its component forever, so a rise in ThornAmount is what marks a new hit.
+        int thornsAdded = 0;
+        if (thorns == null)
+            TryGetComponent(out thorns);
+        if (thorns != null)
+        {
+            int amount = thorns.ThornAmount;
+            if (amount > lastThornAmount)
+                thornsAdded = amount - lastThornAmount;
+            lastThornAmount = amount;
+        }
+
+        // Damage effects. A thorn hit also drops health, so it takes priority over the
+        // normal white/orange flash for that frame.
+        if (thornsAdded > 0)
+        {
+            vfx.PlayBleedHit(this, thornsAdded);
+            bleedTimeLeft = vfx.BleedDuration;
+        }
         if (health != null)
         {
             float current = health.CurrentHealth;
-            if (current < lastHealth)
-                VFXManager.Instance.PlayDamageEffect(this);
+            if (current < lastHealth && thornsAdded == 0)
+                vfx.PlayDamageEffect(this);
             lastHealth = current;
         }
 
-        // Burning embers
+        UpdateBurnEmbers(vfx);
+        UpdateBleedDrips(vfx);
+    }
+
+    private void UpdateBurnEmbers(VFXManager vfx)
+    {
         if (burn == null)
             TryGetComponent(out burn);
 
         if (burn != null)
         {
             emberTimer += Time.deltaTime;
-            float interval = 1f / Mathf.Max(0.1f, VFXManager.Instance.EmberRate);
+            float interval = 1f / Mathf.Max(0.1f, vfx.EmberRate);
             while (emberTimer >= interval)
             {
                 emberTimer -= interval;
-                VFXManager.Instance.PlayEmbers(WorldBounds, 1);
+                vfx.PlayEmbers(WorldBounds, 1);
             }
         }
         else
         {
             emberTimer = 0f;
+        }
+    }
+
+    private void UpdateBleedDrips(VFXManager vfx)
+    {
+        if (bleedTimeLeft <= 0f)
+        {
+            dripTimer = 0f;
+            return;
+        }
+
+        bleedTimeLeft -= Time.deltaTime;
+        dripTimer += Time.deltaTime;
+        float interval = 1f / Mathf.Max(0.1f, vfx.BloodDripRate);
+        while (dripTimer >= interval)
+        {
+            dripTimer -= interval;
+            vfx.PlayBlood(WorldBounds, 1, 0.3f); // slow drip, not a splash
         }
     }
 
