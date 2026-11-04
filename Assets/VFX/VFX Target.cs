@@ -1,13 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Added automatically by VFXManager to anything with a Health component (enemies, defenders, towers).
-/// - Watches the health value, and when it drops asks VFXManager to play the damage effect.
-/// - Watches for a BurnStatus and, while one is attached, gives off rising embers.
-/// - Watches for new thorns on a ThornsStatus and plays a red flash and bleeding.
-/// - Does the actual material-swap flash on this object's renderers.
-/// </summary>
+
 [DisallowMultipleComponent]
 public class VFXTarget : MonoBehaviour
 {

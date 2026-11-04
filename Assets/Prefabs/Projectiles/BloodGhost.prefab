@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 34666852637292674}
   - component: {fileID: 3038347048203161804}
   - component: {fileID: -1154544514488783137}
+  - component: {fileID: 8455050620000337019}
   m_Layer: 0
   m_Name: BloodGhost
   m_TagString: Projectile
@@ -154,3 +155,22 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &8455050620000337019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5775057987688941758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 143bef1007297294c8544fb746101f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileVFX
+  style: 2
+  lineColor: {r: 1, g: 1, b: 0.9, a: 0.9}
+  lineWidth: 0.06
+  lineTime: 0.18
+  lineOffset: {x: 0, y: 0, z: 0}
+  particleSpacing: 0.2
+  particlesPerStep: 1

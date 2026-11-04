@@ -243,6 +243,56 @@ public class VFXManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Small ember left behind by a flying projectile. Short-lived and slow, so it hangs in the
+    /// air behind the projectile and shrinks away, forming a trail.
+    /// </summary>
+    public void PlayTrailEmbers(Vector3 position, int count = 1)
+    {
+        if (emberParticles == null) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            var emit = new ParticleSystem.EmitParams
+            {
+                position = position + Random.insideUnitSphere * 0.08f,
+                velocity = new Vector3(
+                    Random.Range(-0.3f, 0.3f),
+                    Random.Range(0.2f, 0.8f),
+                    Random.Range(-0.3f, 0.3f)),
+                startSize = Random.Range(emberSize.x, emberSize.y) * 0.8f,
+                startLifetime = emberLifetime * Random.Range(0.5f, 0.8f),
+                startColor = PickColor(emberColors, new Color(1f, 0.5f, 0.1f))
+            };
+            emberParticles.Emit(emit, 1);
+        }
+    }
+
+    /// <summary>
+    /// Blood droplet left behind by a flying projectile. It drops away under gravity and
+    /// shrinks out, so the projectile leaves a dripping trail.
+    /// </summary>
+    public void PlayTrailBlood(Vector3 position, int count = 1)
+    {
+        if (bloodParticles == null) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            var emit = new ParticleSystem.EmitParams
+            {
+                position = position + Random.insideUnitSphere * 0.06f,
+                velocity = new Vector3(
+                    Random.Range(-0.25f, 0.25f),
+                    Random.Range(-0.1f, 0.3f),
+                    Random.Range(-0.25f, 0.25f)),
+                startSize = Random.Range(bloodSize.x, bloodSize.y),
+                startLifetime = Random.Range(0.35f, 0.55f),
+                startColor = PickColor(bloodColors, new Color(0.75f, 0.05f, 0.05f))
+            };
+            bloodParticles.Emit(emit, 1);
+        }
+    }
+
     // ---------------------------------------------------------------- Setup
 
     private static Color PickColor(Color[] palette, Color fallback)
@@ -457,6 +507,12 @@ public class VFXManager : MonoBehaviour
 
         var shape = ps.shape;
         shape.enabled = false;
+
+        // Full size for most of the fall, then shrink away so drops don't pop out of existence.
+        var size = ps.sizeOverLifetime;
+        size.enabled = true;
+        size.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+            new Keyframe(0f, 1f), new Keyframe(0.7f, 1f), new Keyframe(1f, 0f)));
 
         // Slower tumble than embers: heavier droplets.
         var rot = ps.rotationOverLifetime;
