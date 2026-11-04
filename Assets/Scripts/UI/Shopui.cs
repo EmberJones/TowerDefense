@@ -19,7 +19,7 @@ public class ShopUI : MonoBehaviour
     public void Open(DefenderPlacementSpot spot)
     {
         UpgradeUI.Instance?.Close();
-
+        MainTowerUpgradeUI.Instance?.Close();
         currentSpot = spot;
 
         if (panelRoot != null)
@@ -38,10 +38,18 @@ public class ShopUI : MonoBehaviour
     {
         if (currentSpot == null) return;
 
-        if (System.Enum.TryParse(towerTypeName, out DefenderFactory.DefenderType type))
+        if (!System.Enum.TryParse(towerTypeName, out DefenderFactory.DefenderType type))
+            return;
+
+        CoinWallet wallet = CoinWallet.Instance;
+        if (!wallet.CanAfford(wallet.TowerCost))
         {
-            currentSpot.PlaceDefender(type);
+            Debug.Log($"[ShopUI] Not enough coins: need {wallet.TowerCost}, have {wallet.Coins}.");
+            return;
         }
+
+        if (currentSpot.PlaceDefender(type))
+            wallet.TrySpend(wallet.TowerCost);
 
         Close();
     }

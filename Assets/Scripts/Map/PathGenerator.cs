@@ -11,6 +11,8 @@ public class PathGenerator : MonoBehaviour
 
     public float baseRadius = 4f;
 
+    public float pathExtension = 20f;
+
     public float angleJitterDegrees = 20f;
 
     public float meanderAmplitude = 8f;
@@ -94,10 +96,28 @@ public class PathGenerator : MonoBehaviour
                     path = candidate;
             }
 
+            ExtendPathOutward(path);
             Paths.Add(path);
         }
     }
+    private void ExtendPathOutward(GeneratedPath path)
+    {
+        if (pathExtension <= 0f || path == null || path.SampledPoints.Count < 4) return;
 
+        Vector3 edge = path.SampledPoints[0];
+        Vector3 outward = edge - path.SampledPoints[3];
+        outward.y = 0f;
+        if (outward.sqrMagnitude < 0.0001f) return;
+        outward.Normalize();
+
+        int steps = Mathf.CeilToInt(pathExtension);
+        List<Vector3> extended = new List<Vector3>(steps + path.SampledPoints.Count);
+        for (int i = steps; i >= 1; i--)
+            extended.Add(edge + outward * (pathExtension * i / steps));
+
+        extended.AddRange(path.SampledPoints);
+        path.SampledPoints = extended;
+    }
     private GeneratedPath GenerateSinglePath(float angleDegrees)
     {
         float angleRad = angleDegrees * Mathf.Deg2Rad;

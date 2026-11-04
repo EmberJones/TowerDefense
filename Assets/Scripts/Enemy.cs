@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     public LayerMask targetLayer;
     public float heightOffset = 0.5f;
 
+    public int coinReward = -1;
+
     public bool ignoreDefenders = false;
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -192,7 +194,17 @@ public class Enemy : MonoBehaviour
 
     private void HandleDeath()
     {
+        CoinWallet.Instance.Add(GetCoinReward());
         Destroy(gameObject);
+    }
+
+    private int GetCoinReward()
+    {
+        if (coinReward >= 0) return coinReward;
+
+        float damagePerSecond = attackDamage / Mathf.Max(attackInterval, 0.05f);
+        float threat = health.MaxHealth * 0.03f + damagePerSecond * 0.2f + moveSpeed * 0.1f;
+        return Mathf.Max(1, Mathf.RoundToInt(threat));
     }
 
     private void OnDrawGizmosSelected()

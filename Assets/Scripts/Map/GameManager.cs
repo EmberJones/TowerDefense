@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
         {
             ShopUI.Instance?.Close();
             UpgradeUI.Instance?.Close();
+            MainTowerUpgradeUI.Instance?.Close();
         }
     }
 

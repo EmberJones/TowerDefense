@@ -19,6 +19,14 @@ public class TerrainGenerator : MonoBehaviour
     public bool generateCollider = true;
     public Material terrainMaterial;
 
+    [Header("Outer Terrain")]
+    [Tooltip("How far the terrain continues past the map edge. Keep this above Path Extension + 15.")]
+    public float edgePadding = 40f;
+    [Tooltip("Height the hills reach at the outer edge.")]
+    public float edgeRise = 12f;
+    public float edgeRiseNoise = 4f;
+    public float edgeRiseNoiseScale = 0.08f;
+
     public bool useDebugVertexColors = false;
     public Color debugRiverColor = new Color(0.5f, 0.35f, 0.2f);
     public Color debugPlateauColor = new Color(0.3f, 0.6f, 0.3f);
@@ -74,29 +82,43 @@ public class TerrainGenerator : MonoBehaviour
 
     private void BuildMesh()
     {
-        int vertsPerSide = resolution + 1;
-        Vector3[] vertices = new Vector3[vertsPerSide * vertsPerSide];
-        Vector2[] uvs = new Vector2[vertices.Length];
-        Color[] colors = new Color[vertices.Length];
-        int[] triangles = new int[resolution * resolution * 6];
-
+        int baseRes = Mathf.Max(1, resolution);
         float halfWidth = pathGenerator.mapWidth * 0.5f;
         float halfDepth = pathGenerator.mapDepth * 0.5f;
 
-        for (int z = 0; z <= resolution; z++)
-        {
-            for (int x = 0; x <= resolution; x++)
-            {
-                int index = z * vertsPerSide + x;
+        float cellX = pathGenerator.mapWidth / baseRes;
+        float cellZ = pathGenerator.mapDepth / baseRes;
 
-                float worldX = Mathf.Lerp(-halfWidth, halfWidth, x / (float)resolution) + pathGenerator.mapCenter.x;
-                float worldZ = Mathf.Lerp(-halfDepth, halfDepth, z / (float)resolution) + pathGenerator.mapCenter.z;
+        int padX = Mathf.CeilToInt(Mathf.Max(0f, edgePadding) / cellX);
+        int padZ = Mathf.CeilToInt(Mathf.Max(0f, edgePadding) / cellZ);
+
+        int resX = baseRes + padX * 2;
+        int resZ = baseRes + padZ * 2;
+        int vertsX = resX + 1;
+        int vertsZ = resZ + 1;
+
+        float startX = pathGenerator.mapCenter.x - halfWidth - padX * cellX;
+        float startZ = pathGenerator.mapCenter.z - halfDepth - padZ * cellZ;
+
+        Vector3[] vertices = new Vector3[vertsX * vertsZ];
+        Vector2[] uvs = new Vector2[vertices.Length];
+        Color[] colors = new Color[vertices.Length];
+        int[] triangles = new int[resX * resZ * 6];
+
+        for (int z = 0; z <= resZ; z++)
+        {
+            for (int x = 0; x <= resX; x++)
+            {
+                int index = z * vertsX + x;
+
+                float worldX = startX + x * cellX;
+                float worldZ = startZ + z * cellZ;
 
                 float pathInfluence = GetPathInfluence(worldX, worldZ);
                 float height = CalculateHeight(worldX, worldZ, pathInfluence);
 
                 vertices[index] = new Vector3(worldX, height, worldZ);
-                uvs[index] = new Vector2(x / (float)resolution, z / (float)resolution);
+                uvs[index] = new Vector2(x / (float)resX, z / (float)resZ);
                 colors[index] = useDebugVertexColors
                     ? Color.Lerp(debugPlateauColor, debugRiverColor, pathInfluence)
                     : new Color(pathInfluence, 0f, 0f, 1f);
@@ -104,13 +126,13 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         int triIndex = 0;
-        for (int z = 0; z < resolution; z++)
+        for (int z = 0; z < resZ; z++)
         {
-            for (int x = 0; x < resolution; x++)
+            for (int x = 0; x < resX; x++)
             {
-                int topLeft = z * vertsPerSide + x;
+                int topLeft = z * vertsX + x;
                 int topRight = topLeft + 1;
-                int bottomLeft = (z + 1) * vertsPerSide + x;
+                int bottomLeft = (z + 1) * vertsX + x;
                 int bottomRight = bottomLeft + 1;
 
                 triangles[triIndex++] = topLeft;
@@ -167,6 +189,15 @@ public class TerrainGenerator : MonoBehaviour
         return 1f - smooth;
     }
 
+    private float OutsideDistance(float worldX, float worldZ)
+    {
+        float dx = Mathf.Abs(worldX - pathGenerator.mapCenter.x) - pathGenerator.mapWidth * 0.5f;
+        float dz = Mathf.Abs(worldZ - pathGenerator.mapCenter.z) - pathGenerator.mapDepth * 0.5f;
+        dx = Mathf.Max(dx, 0f);
+        dz = Mathf.Max(dz, 0f);
+        return Mathf.Sqrt(dx * dx + dz * dz);
+    }
+
     private float CalculateHeight(float worldX, float worldZ, float pathInfluence)
     {
         float plateauNoise = Mathf.PerlinNoise((worldX + noiseOffsetX) * noiseScale, (worldZ + noiseOffsetZ) * noiseScale);
@@ -175,7 +206,19 @@ public class TerrainGenerator : MonoBehaviour
         float baseHeight = plateauHeight * (1f - pathInfluence);
         float noiseContribution = Mathf.Lerp(plateauNoise * plateauNoiseStrength, riverNoise * riverNoiseStrength, pathInfluence);
 
-        return baseHeight + noiseContribution;
+        float height = baseHeight + noiseContribution;
+
+        float outside = OutsideDistance(worldX, worldZ);
+        if (outside > 0f)
+        {
+            float t = Mathf.Clamp01(outside / Mathf.Max(edgePadding, 0.01f));
+            t = t * t * (3f - 2f * t);
+
+            float hillNoise = Mathf.PerlinNoise((worldX + noiseOffsetX) * edgeRiseNoiseScale, (worldZ + noiseOffsetZ) * edgeRiseNoiseScale);
+            height += (edgeRise + hillNoise * edgeRiseNoise) * t * (1f - pathInfluence);
+        }
+
+        return height;
     }
 
     public float SampleHeight(float worldX, float worldZ)

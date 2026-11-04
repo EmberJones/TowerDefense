@@ -57,12 +57,17 @@ public class TowerUpgradeTree : MonoBehaviour
         return null;
     }
 
-    public void SelectUpgrade(UpgradeSlot slot)
+    public bool SelectUpgrade(UpgradeSlot slot)
     {
-        if (!CanSelect(slot)) return;
+        if (!CanSelect(slot)) return false;
+        if (FindDefinition(slot) == null) return false;
+
+        CoinWallet wallet = CoinWallet.Instance;
+        if (!wallet.TrySpend(wallet.UpgradeCost(slot))) return false;
 
         selectedSlots.Add(slot);
         ApplyUpgrade(slot);
+        return true;
     }
 
     private void ApplyUpgrade(UpgradeSlot slot)

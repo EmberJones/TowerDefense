@@ -16,16 +16,20 @@ public class DefenderPlacementSpot : MonoBehaviour
         ShopUI.Instance?.Open(this);
     }
 
-    public void PlaceDefender(DefenderFactory.DefenderType type)
+    public bool PlaceDefender(DefenderFactory.DefenderType type)
     {
-        if (IsOccupied || defenderFactory == null) return;
+        if (IsOccupied || defenderFactory == null) return false;
 
-        defenderFactory.CreateTower(type, transform.position);
+        Defender placed = defenderFactory.CreateTower(type, transform.position);
+        if (placed == null) return false;
+
         IsOccupied = true;
 
         Collider col = GetComponent<Collider>();
         if (col != null)
             col.enabled = false;
+
+        return true;
     }
 
     private void OnDrawGizmos()

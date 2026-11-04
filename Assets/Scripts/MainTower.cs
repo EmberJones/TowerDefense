@@ -8,11 +8,21 @@ public class MainTower : MonoBehaviour
     public TerrainGenerator terrainGenerator;
 
     private Health health;
+    private MainTowerUpgrades upgrades;
 
     private void Awake()
     {
         health = GetComponent<Health>();
         health.OnDeath += HandleDeath;
+
+        upgrades = GetComponent<MainTowerUpgrades>();
+        if (upgrades == null)
+            upgrades = gameObject.AddComponent<MainTowerUpgrades>();
+    }
+
+    private void OnMouseDown()
+    {
+        MainTowerUpgradeUI.Instance?.Open(upgrades);
     }
 
     public void PlaceAtCenter()

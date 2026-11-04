@@ -12,6 +12,13 @@ public class UpgradeUI : MonoBehaviour
     public GameObject rightButton;
     public GameObject comboButton;
 
+    public GameObject leftCostLabel;
+    public GameObject middleCostLabel;
+    public GameObject rightCostLabel;
+    public GameObject comboCostLabel;
+
+    private CoinWallet wallet;
+
     public Image leftIcon;
     public Image middleIcon;
     public Image rightIcon;
@@ -34,6 +41,11 @@ public class UpgradeUI : MonoBehaviour
     {
         ShopUI.Instance?.Close();
 
+        if (wallet != null)
+            wallet.OnCoinsChanged -= HandleCoinsChanged;
+        wallet = CoinWallet.Instance;
+        wallet.OnCoinsChanged += HandleCoinsChanged;
+
         if (currentHealth != null)
             currentHealth.OnDeath -= HandleTowerDeath;
 
@@ -54,6 +66,9 @@ public class UpgradeUI : MonoBehaviour
         if (currentHealth != null)
             currentHealth.OnDeath -= HandleTowerDeath;
 
+        if (wallet != null)
+            wallet.OnCoinsChanged -= HandleCoinsChanged;
+
         currentTree = null;
         currentHealth = null;
 
@@ -65,13 +80,28 @@ public class UpgradeUI : MonoBehaviour
     {
         Close();
     }
+    private void HandleCoinsChanged(int coins)
+    {
+        RefreshButtons();
+    }
+
+    private void RefreshCost(GameObject buttonObj, GameObject costLabel, UpgradeSlot slot)
+    {
+        int cost = wallet.UpgradeCost(slot);
+        UIText.Set(costLabel, cost.ToString());
+
+        if (buttonObj == null) return;
+
+        Button button = buttonObj.GetComponent<Button>();
+        if (button != null)
+            button.interactable = wallet.CanAfford(cost);
+    }
 
     private void RefreshButtons()
     {
         if (currentTree == null) return;
 
-        // If two base slots are already chosen, hide ALL base buttons and show combo only.
-        // Otherwise, show base buttons (SetButtonState hides the ones already picked).
+
         int selectedBaseCount = GetSelectedBaseCount();
         bool baseLocked = selectedBaseCount >= 2;
 
@@ -82,6 +112,10 @@ public class UpgradeUI : MonoBehaviour
         SetButtonState(leftButton, leftIcon, UpgradeSlot.Left);
         SetButtonState(middleButton, middleIcon, UpgradeSlot.Middle);
         SetButtonState(rightButton, rightIcon, UpgradeSlot.Right);
+
+        RefreshCost(leftButton, leftCostLabel, UpgradeSlot.Left);
+        RefreshCost(middleButton, middleCostLabel, UpgradeSlot.Middle);
+        RefreshCost(rightButton, rightCostLabel, UpgradeSlot.Right);
 
         UpgradeSlot? pendingCombo = currentTree.GetPendingComboSlot();
 
@@ -99,6 +133,8 @@ public class UpgradeUI : MonoBehaviour
 
                 if (comboIcon != null && def != null && def.icon != null)
                     comboIcon.sprite = def.icon;
+
+                RefreshCost(comboButton, comboCostLabel, pendingCombo.Value);
             }
         }
     }
