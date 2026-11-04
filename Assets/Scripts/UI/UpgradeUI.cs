@@ -24,6 +24,11 @@ public class UpgradeUI : MonoBehaviour
     public Image rightIcon;
     public Image comboIcon;
 
+    public GameObject leftNameLabel;
+    public GameObject middleNameLabel;
+    public GameObject rightNameLabel;
+    public GameObject comboNameLabel;
+
     public Text comboButtonLabel;
 
     private TowerUpgradeTree currentTree;
@@ -109,9 +114,9 @@ public class UpgradeUI : MonoBehaviour
         SetButtonVisibility(middleButton, UpgradeSlot.Middle, baseLocked);
         SetButtonVisibility(rightButton, UpgradeSlot.Right, baseLocked);
 
-        SetButtonState(leftButton, leftIcon, UpgradeSlot.Left);
-        SetButtonState(middleButton, middleIcon, UpgradeSlot.Middle);
-        SetButtonState(rightButton, rightIcon, UpgradeSlot.Right);
+        SetButtonState(leftButton, leftIcon, leftNameLabel, UpgradeSlot.Left);
+        SetButtonState(middleButton, middleIcon, middleNameLabel, UpgradeSlot.Middle);
+        SetButtonState(rightButton, rightIcon, rightNameLabel, UpgradeSlot.Right);
 
         RefreshCost(leftButton, leftCostLabel, UpgradeSlot.Left);
         RefreshCost(middleButton, middleCostLabel, UpgradeSlot.Middle);
@@ -134,6 +139,8 @@ public class UpgradeUI : MonoBehaviour
                 if (comboIcon != null && def != null && def.icon != null)
                     comboIcon.sprite = def.icon;
 
+                UIText.Set(comboNameLabel, def != null ? def.upgradeName : pendingCombo.Value.ToString());
+
                 RefreshCost(comboButton, comboCostLabel, pendingCombo.Value);
             }
         }
@@ -153,11 +160,9 @@ public class UpgradeUI : MonoBehaviour
         if (currentTree.IsSlotSelected(UpgradeSlot.Right)) count++;
         return count;
     }
-    private void SetButtonState(GameObject buttonObj, Image icon, UpgradeSlot slot)
+    private void SetButtonState(GameObject buttonObj, Image icon, GameObject nameLabel, UpgradeSlot slot)
     {
         if (buttonObj == null) return;
-
-        if (icon == null) return;
 
         TowerUpgradeDefinition def = currentTree.FindDefinition(slot);
         if (def == null)
@@ -165,6 +170,11 @@ public class UpgradeUI : MonoBehaviour
             Debug.LogWarning($"[UpgradeUI] No definition for slot {slot}.");
             return;
         }
+
+        UIText.Set(nameLabel, string.IsNullOrEmpty(def.upgradeName) ? def.name : def.upgradeName);
+
+        if (icon == null) return;
+
         if (def.icon == null)
         {
             Debug.LogWarning($"[UpgradeUI] Definition '{def.name}' for slot {slot} has no icon assigned.");

@@ -12,6 +12,14 @@ public class WaveManager : MonoBehaviour
     public float enemiesPerWaveGrowth = 1.5f;
     public float timeBetweenWaves = 8f;
 
+    public float initialDelay = 20f;
+
+    public float CountdownDuration { get; private set; }
+    public float CountdownRemaining { get; private set; }
+    public bool IsCountingDown { get; private set; }
+    public int WaveNumber => waveNumber;
+
+
     [SerializeField] private float rangedChanceMult = 0.06f;
     [SerializeField] private float rusherChanceMult = 0.04f;
     [SerializeField] private float MaxRangedChanceMult = 0.5f;
@@ -30,6 +38,8 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator RunWaves()
     {
+        yield return StartCoroutine(Countdown(initialDelay));
+
         while (GameManager.Instance == null || !GameManager.Instance.IsGameOver)
         {
             waveNumber++;
@@ -38,8 +48,24 @@ public class WaveManager : MonoBehaviour
 
             AdjustDifficulty();
 
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return StartCoroutine(Countdown(timeBetweenWaves));
         }
+    }
+
+    private IEnumerator Countdown(float duration)
+    {
+        CountdownDuration = duration;
+        CountdownRemaining = duration;
+        IsCountingDown = true;
+
+        while (CountdownRemaining > 0f)
+        {
+            CountdownRemaining -= Time.deltaTime;
+            yield return null;
+        }
+
+        CountdownRemaining = 0f;
+        IsCountingDown = false;
     }
 
     private IEnumerator SpawnWave()
