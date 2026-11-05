@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
-  m_Name: MaelstromCurse
+  m_Name: Frostburn
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
-  upgradeName: Maelstrom
-  description: 'Death curse creates a storm of lightning
-
-'
-  slot: 4
-  icon: {fileID: 21300000, guid: 6f81d5a77b988ca448537e08c1c80a40, type: 3}
+  upgradeName: Frostburn
+  description: Burn slows enemies
+  slot: 5
+  icon: {fileID: 21300000, guid: 5fd942cc7d4c5444f9615697d1cbdf8b, type: 3}
   bonusDamage: 0
   bonusRange: 0
   attackIntervalMultiplier: 1
   bonusMaxHealth: 10
-  effectPrefab: {fileID: 2642956833051195722, guid: 109e8a020c7bca240a91fd81dc4b5171, type: 3}
+  effectPrefab: {fileID: 1531030279699928787, guid: f553797d6de1fdf4ba1eea7149c7ad79, type: 3}

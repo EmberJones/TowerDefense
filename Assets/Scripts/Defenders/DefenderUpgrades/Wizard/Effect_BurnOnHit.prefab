@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4935522043887230594}
   - component: {fileID: 4654632130360077386}
+  - component: {fileID: -3508214476197652164}
   m_Layer: 0
   m_Name: Effect_BurnOnHit
   m_TagString: Untagged
@@ -47,3 +48,17 @@ MonoBehaviour:
   burnDamagePerTick: 3
   tickInterval: 1
   burnDuration: 4
+--- !u!114 &-3508214476197652164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531168909508124397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898f6160f8428dc4c85a1fdca1ecbc6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileSwapEffect
+  projectilePrefab: {fileID: 5775057987688941758, guid: 61bd2b9a6d03c294dac84f0250dd951f, type: 3}
+  projectileSpeed: 50

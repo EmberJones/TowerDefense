@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5761500802054909377}
   - component: {fileID: 9202630523578698210}
+  - component: {fileID: -7439364022238696996}
   m_Layer: 0
   m_Name: Effect_ChainLightning
   m_TagString: Untagged
@@ -45,8 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChainLightningEffect
   maxChains: 3
-  chainRadius: 3
+  chainRadius: 20
   chainDamage: 8
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
+  boltColor: {r: 1, g: 0.899874, b: 0, a: 1}
+--- !u!114 &-7439364022238696996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9103117156386913902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898f6160f8428dc4c85a1fdca1ecbc6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileSwapEffect
+  projectilePrefab: {fileID: 5775057987688941758, guid: 3a620dffefc92b24ba4847d41c38a575, type: 3}
+  projectileSpeed: 100

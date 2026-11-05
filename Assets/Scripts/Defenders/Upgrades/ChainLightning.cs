@@ -8,7 +8,7 @@ public class ChainLightningEffect : MonoBehaviour
     public float chainRadius = 5f;
     public int chainDamage = 8;
     public LayerMask targetLayer;
-
+    public Color boltColor = new Color(0.55f, 0.85f, 1f);
     public event Action<Transform> OnChainJump;
 
     private Attacker attacker;
@@ -33,6 +33,10 @@ public class ChainLightningEffect : MonoBehaviour
         HashSet<Transform> hitEnemies = new HashSet<Transform> { target };
         Transform current = target;
 
+        QuickVFX.Burst(QuickVFX.Center(target), boltColor, 10, 3f, 0.12f, 0.25f);
+        Vector3 origin = attacker.firePoint != null ? attacker.firePoint.position : attacker.transform.position + Vector3.up * 1.5f;
+        QuickVFX.Bolt(origin, QuickVFX.Center(target), boltColor);
+
         for (int i = 0; i < maxChains; i++)
         {
             Transform next = FindNearestUnhit(current, hitEnemies);
@@ -40,6 +44,9 @@ public class ChainLightningEffect : MonoBehaviour
 
             IDamageable damageable = next.GetComponent<IDamageable>();
             damageable?.TakeDamage(chainDamage);
+
+            QuickVFX.Bolt(QuickVFX.Center(current), QuickVFX.Center(next), boltColor);
+            QuickVFX.Burst(QuickVFX.Center(next), boltColor, 10, 3f, 0.12f, 0.25f);
 
             hitEnemies.Add(next);
             current = next;

@@ -39,8 +39,11 @@ public class Defender : MonoBehaviour
             health.OnDeath -= HandleDeath;
     }
 
-    private void OnMouseDown()
+    private void OnMouseUpAsButton()
     {
+        if (UnityEngine.EventSystems.EventSystem.current != null &&
+            UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+
         if (upgradeTree != null)
             UpgradeUI.Instance?.Open(upgradeTree);
     }

@@ -16,9 +16,16 @@ public class WaveTimerUI : MonoBehaviour
     public float featherSize = 0.02f;
     [Range(0f, 1f)] public float featherAlpha = 0.35f;
 
+    public Button skipButton;
+
+    public void SkipWave()
+    {
+        if (waveManager != null) waveManager.SkipCountdown();
+    }
     private void Update()
     {
         if (waveManager == null) return;
+        if (skipButton != null) skipButton.interactable = waveManager.IsCountingDown;
 
         bool counting = waveManager.IsCountingDown && waveManager.CountdownDuration > 0f;
         float progress = counting ? 1f - waveManager.CountdownRemaining / waveManager.CountdownDuration : 0f;

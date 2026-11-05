@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BurnLightning
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Lightning Burn
-  description: Chain lightning ignites enemies
+  description: Lightning ignites enemies
   slot: 3
   icon: {fileID: 21300000, guid: a5f900f5821d48945af1a2bab001c9ba, type: 3}
   bonusDamage: 0

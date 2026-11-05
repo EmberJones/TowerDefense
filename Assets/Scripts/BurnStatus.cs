@@ -17,7 +17,7 @@ public class BurnStatus : MonoBehaviour
     {
         this.damagePerTick = Mathf.Max(this.damagePerTick, damagePerTick);
         this.tickInterval = tickInterval;
-        remainingDuration = Mathf.Max(remainingDuration, duration);
+        remainingDuration = duration;
     }
 
     private void Update()

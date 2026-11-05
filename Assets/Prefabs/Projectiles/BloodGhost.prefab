@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileVFX
   style: 2
-  lineColor: {r: 1, g: 1, b: 0.9, a: 0.9}
+  lineColor: {r: 0.9622642, g: 0.698525, b: 0.63999647, a: 0.9}
   lineWidth: 0.06
   lineTime: 0.18
   lineOffset: {x: 0, y: 0, z: 0}

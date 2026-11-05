@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform firePoint;
     public float projectileSpeed = 15f;
+    [HideInInspector] public float speedMultiplier = 1f;
 
     public event Action OnReachedMainTower;
     public event Action<Transform> OnAttack;
@@ -77,7 +78,7 @@ public class Enemy : MonoBehaviour
         Vector3 dir = targetPoint - transform.position;
         dir.y = 0f;
 
-        float step = moveSpeed * Time.deltaTime;
+        float step = moveSpeed * speedMultiplier * Time.deltaTime;
 
         if (dir.magnitude <= step)
         {

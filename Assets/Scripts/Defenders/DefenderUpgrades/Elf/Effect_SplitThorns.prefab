@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComboSharedThorns
   maxSummedStacks: 0
-  sharedStackMultiplier: 1
+  sharedStackMultiplier: 2
   requireSplitShot: 1
   resolveDelay: 0.15

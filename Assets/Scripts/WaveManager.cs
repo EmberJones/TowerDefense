@@ -154,7 +154,11 @@ public class WaveManager : MonoBehaviour
                              "kill tracking will not work for it.");
         }
     }
-
+    public void SkipCountdown()
+    {
+        if (IsCountingDown)
+            CountdownRemaining = 0f;
+    }
     private void AdjustDifficulty()
     {
         int totalTracked = enemiesKilledThisWave + enemiesLeakedThisWave;

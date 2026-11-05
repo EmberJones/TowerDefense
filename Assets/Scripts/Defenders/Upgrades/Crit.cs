@@ -48,6 +48,8 @@ public class Crit : MonoBehaviour
 
         finalDamage = Mathf.CeilToInt(baseDamage * TotalMultiplier);
         OnCrit?.Invoke(target, finalDamage);
+        QuickVFX.Burst(QuickVFX.Center(target), new Color(1f, 0.85f, 0.2f), 20, 5f, 0.18f, 0.35f);
+        QuickVFX.Ring(target.position, 1.2f, new Color(1f, 0.85f, 0.2f), 0.25f);
         return true;
     }
 }

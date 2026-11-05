@@ -12,13 +12,19 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float minDistance = 5f;
     [SerializeField] private float maxDistance = 50f;
 
+    [Header("Pan Settings")]
+    [SerializeField] private float panSpeed = 0.002f;
+    [SerializeField] private float maxPanDistance = 40f;
+    [SerializeField] private float scrollZoomSpeed = 3f;
+
+    private Vector3 panOffset;
     [Header("Key Bindings")]
     [SerializeField] private KeyCode rotateLeftKey = KeyCode.LeftArrow;
     [SerializeField] private KeyCode rotateRightKey = KeyCode.RightArrow;
     [SerializeField] private KeyCode rotateUpKey = KeyCode.UpArrow;
     [SerializeField] private KeyCode rotateDownKey = KeyCode.DownArrow;
-    [SerializeField] private KeyCode zoomInKey = KeyCode.Equals; // = key
-    [SerializeField] private KeyCode zoomOutKey = KeyCode.Minus; // - key
+    [SerializeField] private KeyCode zoomInKey = KeyCode.Equals; 
+    [SerializeField] private KeyCode zoomOutKey = KeyCode.Minus; 
     [SerializeField] private KeyCode resetKey = KeyCode.R;
 
     [Header("References")]
@@ -91,6 +97,23 @@ public class CameraController : MonoBehaviour
             ZoomCamera(-1f);
         }
 
+        //Mouse scroll zoom and drag-pan
+        float scroll = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(scroll) > 0.01f && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+            currentDistance -= scroll * scrollZoomSpeed;
+            currentDistance = Mathf.Clamp(currentDistance, minDistance, maxDistance);
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            Vector3 right = cameraTransform.right;
+            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+            Vector2 delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            panOffset -= (right * delta.x + forward * delta.y) * (panSpeed * 100f) * currentDistance * 0.1f;
+            panOffset = Vector3.ClampMagnitude(panOffset, maxPanDistance);
+        }
         // Handle reset
         if (Input.GetKeyDown(resetKey))
         {
@@ -128,11 +151,11 @@ public class CameraController : MonoBehaviour
             Mathf.Cos(horizontalRad) * Mathf.Cos(verticalRad)
         );
 
-        targetPosition = targetPoint.position + direction * currentDistance;
+        Vector3 focus = targetPoint.position + panOffset;
+        targetPosition = focus + direction * currentDistance;
 
         cameraTransform.position = targetPosition;
-
-        cameraTransform.LookAt(targetPoint.position);
+        cameraTransform.LookAt(focus);
     }
 
     public void SetTarget(Transform newTarget)
@@ -146,6 +169,7 @@ public class CameraController : MonoBehaviour
         currentDistance = (minDistance + maxDistance) / 2f;
         currentHorizontalAngle = 0f;
         currentVerticalAngle = 45f;
+        panOffset = Vector3.zero;
         UpdateCameraPosition();
     }
 

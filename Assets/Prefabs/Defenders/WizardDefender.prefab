@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.395915
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.6757865
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.1304493
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d329164051efda4a8c252b64eea5e8e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -308,7 +308,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5775057987688941758, guid: ed08ce83d15c13b469e21615153c354c, type: 3}
   firePoint: {fileID: 6827016807495407864}
-  projectileSpeed: 16
+  projectileSpeed: 20
   deferRangedResolution: 1
   fallbackResolveDelay: 1.15
   showRangeIndicator: 1

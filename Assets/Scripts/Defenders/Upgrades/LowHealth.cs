@@ -2,18 +2,18 @@ using UnityEngine;
 
 public static class LowHealth
 {
-    public static float Factor(Health health, float threshold)
+    public static float Factor(Health health, float startsAt, float maxedAt)
     {
         if (health == null || health.MaxHealth <= 0 || health.CurrentHealth <= 0) return 0f;
-
         float fraction = (float)health.CurrentHealth / health.MaxHealth;
-        return Mathf.Clamp01((threshold - fraction) / Mathf.Max(threshold, 0.01f));
+        return Mathf.Clamp01(Mathf.InverseLerp(startsAt, maxedAt, fraction));
     }
 }
 
 public abstract class LowHealthEffect : MonoBehaviour
 {
-    [Range(0.05f, 1f)] public float lowHealthThreshold = 0.5f;
+    [Range(0f, 1f)] public float startsAtHealth = 0.9f;
+    [Range(0f, 1f)] public float maxedAtHealth = 0.1f;
 
     protected Attacker attacker;
     protected Health health;
@@ -45,7 +45,7 @@ public abstract class LowHealthEffect : MonoBehaviour
 
     protected void Refresh()
     {
-        Apply(LowHealth.Factor(health, lowHealthThreshold));
+        Apply(LowHealth.Factor(health, startsAtHealth, maxedAtHealth));
     }
 
     protected abstract void Apply(float factor);

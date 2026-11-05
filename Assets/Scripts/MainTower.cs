@@ -20,8 +20,11 @@ public class MainTower : MonoBehaviour
             upgrades = gameObject.AddComponent<MainTowerUpgrades>();
     }
 
-    private void OnMouseDown()
+    private void OnMouseUpAsButton()
     {
+        if (UnityEngine.EventSystems.EventSystem.current != null &&
+            UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+
         MainTowerUpgradeUI.Instance?.Open(upgrades);
     }
 

@@ -38,7 +38,7 @@ public class ComboSharedThorns : MonoBehaviour
             splitShot.OnExtraShotFired += HandleExtraFired;
 
         if (thorns != null)
-            thorns.suppressNormalApplication = true;
+            thorns.suppressNormalApplication = false;
     }
 
     private void OnDestroy()
@@ -95,19 +95,16 @@ public class ComboSharedThorns : MonoBehaviour
         if (requireSplitShot && attackTargets.Count < 2) yield break;
 
         // Sum thorns across the targets struck by attack.
-        int summed = 0;
-        int damagePerThorn = thorns != null ? thorns.damagePerThorn : 1;
-
         var liveTargets = new List<Transform>();
         foreach (var t in attackTargets)
-        {
-            if (t == null) continue;
-            liveTargets.Add(t);
-            var status = t.GetComponent<ThornsStatus>();
-            if (status != null) summed += status.ThornAmount;
-        }
+            if (t != null) liveTargets.Add(t);
 
         if (liveTargets.Count == 0) yield break;
+
+        int perTarget = thorns != null ? thorns.thornAmount : 1;
+        int damagePerThorn = thorns != null ? thorns.damagePerThorn : 1;
+
+        int summed = perTarget * liveTargets.Count;
 
         if (maxSummedStacks > 0 && summed > maxSummedStacks)
             summed = maxSummedStacks;
@@ -119,8 +116,7 @@ public class ComboSharedThorns : MonoBehaviour
 
         foreach (var t in liveTargets)
         {
-            if (t == null) continue;
-            var dmg = t.GetComponent<IDamageable>();
+            IDamageable dmg = t.GetComponent<IDamageable>();
             dmg?.TakeDamage(totalDamage);
         }
 

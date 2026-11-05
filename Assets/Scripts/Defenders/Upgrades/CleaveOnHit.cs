@@ -33,6 +33,7 @@ public class CleaveOnHitEffect : MonoBehaviour
 
         float radius = cleaveRadius * radiusScale;
         int baseDamage = Mathf.CeilToInt(attacker.attackDamage * CleaveMultiplier * damageScale);
+        QuickVFX.Ring(primaryTarget.position, radius, new Color(1f, 0.45f, 0.15f), 0.3f);
 
         Collider[] hits = Physics.OverlapSphere(primaryTarget.position, radius, targetLayer);
         HashSet<Transform> damaged = new HashSet<Transform>();
@@ -49,6 +50,7 @@ public class CleaveOnHitEffect : MonoBehaviour
                 crit.TryCrit(baseDamage, hit.transform, out damage);
 
             damageable.TakeDamage(damage);
+            QuickVFX.Burst(QuickVFX.Center(hit.transform), new Color(1f, 0.45f, 0.15f), 8, 3f, 0.14f, 0.3f);
         }
     }
 }

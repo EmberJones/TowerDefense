@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BurnAttacks
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Burning Attacks
-  description: Attacks ignite enemies, dealing damage over time
+  description: Attacks ignite enemies
   slot: 1
   icon: {fileID: 21300000, guid: 092f18716eb243f4791e28e26b5fa7b6, type: 3}
   bonusDamage: 0

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5658c057a68c224aae75ba56b84f90e, type: 3}
-  m_Name: DeathCurse
+  m_Name: ChainFrost
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
-  upgradeName: Death Explosion
-  description: "Enemies explode on death.\t"
-  slot: 2
-  icon: {fileID: 21300000, guid: 6d782e5c095503947a41cef04c727b08, type: 3}
+  upgradeName: Chain Frost
+  description: Lightning slows enemies
+  slot: 4
+  icon: {fileID: 21300000, guid: 20a6cb6bb4ba4ad408ef592c6477331b, type: 3}
   bonusDamage: 0
   bonusRange: 0
   attackIntervalMultiplier: 1
   bonusMaxHealth: 10
-  effectPrefab: {fileID: 8938783363403610657, guid: 47e671f385f567c4881129f1e7fe7095, type: 3}
+  effectPrefab: {fileID: 88626050187171379, guid: 50e5abe85d8d2104581340824d1d95ee, type: 3}
