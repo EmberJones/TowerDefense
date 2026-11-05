@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Berserk Cleave
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Berserk Cleave
-  description: Cleave amount increases as health decreases
+  description: Cleave increases at low HP
   slot: 4
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f5f08ceba81c97e409b1e59d0ce40177, type: 3}
   bonusDamage: 0
   bonusRange: 0
   attackIntervalMultiplier: 1
   bonusMaxHealth: 50
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 7191117983901593299, guid: 45cecb914426f29458e63b9c3ad6eb13, type: 3}

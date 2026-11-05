@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Cleave
   m_EditorClassIdentifier: Assembly-CSharp::TowerUpgradeDefinition
   upgradeName: Cleave
-  description: 'Attacks cleave
+  description: 'Attacks damage enemies in a cone around the target
 
 '
   slot: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1bb8088d051f0074da7f0ac9648fe872, type: 3}
   bonusDamage: 0
   bonusRange: 0
   attackIntervalMultiplier: 1
