@@ -1,13 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Add this to a projectile prefab (next to the Projectile script) and pick a style.
-/// - ArrowTrail: a thin line that follows the projectile and fades out behind it.
-/// - FireTrail:  low-poly embers left behind, matching the burn effect.
-/// - BloodTrail: low-poly blood drops left behind, matching the bleed effect.
-/// The fire and blood particles are emitted through VFXManager, so colours and sizes are
-/// tuned there. Only the arrow line's look is set here.
-/// </summary>
 public class ProjectileVFX : MonoBehaviour
 {
     public enum Style { ArrowTrail, FireTrail, BloodTrail }

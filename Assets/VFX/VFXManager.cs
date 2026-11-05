@@ -1,11 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Central hub for all visual effects. Other scripts call into this (or, for damage, burning and
-/// bleeding, a VFXTarget does it automatically) instead of owning their own effect code.
-/// To add a new effect: add a public Play___ method here, plus any settings it needs.
-/// </summary>
 public class VFXManager : MonoBehaviour
 {
     public static VFXManager Instance { get; private set; }
@@ -113,10 +108,6 @@ public class VFXManager : MonoBehaviour
 
     // ---------------------------------------------------------------- Public API
 
-    /// <summary>
-    /// Flash plus particles when a target takes damage. White for normal hits,
-    /// orange with a puff of embers when the target is burning (so burn ticks read as fire).
-    /// </summary>
     public void PlayDamageEffect(VFXTarget target)
     {
         if (target == null) return;
@@ -133,10 +124,6 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// A thorn hit: red flash and a splash of blood that falls to the ground.
-    /// thornsAdded scales the splash so bigger thorn hits bleed more.
-    /// </summary>
     public void PlayBleedHit(VFXTarget target, int thornsAdded)
     {
         if (target == null) return;
@@ -146,11 +133,6 @@ public class VFXManager : MonoBehaviour
         PlayBlood(target.WorldBounds, count, bloodBurstSpeed);
     }
 
-    /// <summary>
-    /// Emits blood chunks from random points on the model. Each chunk's lifetime is worked out
-    /// from its fall, so it disappears when it reaches the bottom of the model (the ground).
-    /// speed ~3 gives a splash, ~0.3 gives a slow drip.
-    /// </summary>
     public void PlayBlood(Bounds bounds, int count, float speed)
     {
         if (bloodParticles == null) return;
@@ -185,11 +167,6 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Emits a burst of particles around a world position. Each particle starts at the
-    /// given radius from the centre (so it begins outside the model, not buried inside it)
-    /// and flies outward.
-    /// </summary>
     public void PlayBurst(Vector3 position, Color color, int count, float radius = 0.3f)
     {
         if (hitParticles == null) return;
@@ -211,10 +188,7 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Emits low-poly ember chunks that rise from random points inside the given bounds.
-    /// speedMultiplier > 1 makes a more energetic puff (used for burn damage ticks).
-    /// </summary>
+
     public void PlayEmbers(Bounds bounds, int count, float speedMultiplier = 1f)
     {
         if (emberParticles == null) return;
@@ -243,10 +217,7 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Small ember left behind by a flying projectile. Short-lived and slow, so it hangs in the
-    /// air behind the projectile and shrinks away, forming a trail.
-    /// </summary>
+
     public void PlayTrailEmbers(Vector3 position, int count = 1)
     {
         if (emberParticles == null) return;
@@ -268,10 +239,6 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Blood droplet left behind by a flying projectile. It drops away under gravity and
-    /// shrinks out, so the projectile leaves a dripping trail.
-    /// </summary>
     public void PlayTrailBlood(Vector3 position, int count = 1)
     {
         if (bloodParticles == null) return;
@@ -327,11 +294,6 @@ public class VFXManager : MonoBehaviour
         return mat;
     }
 
-    /// <summary>
-    /// A tiny faceted octahedron (a "gem" shape). Each face has its own vertices and its own
-    /// brightness baked into the vertex colours, so even with an unlit material it reads as
-    /// flat-shaded low poly rather than a blob. Shared by embers and blood.
-    /// </summary>
     private Mesh CreateLowPolyMesh()
     {
         Vector3 t = new Vector3(0f, 0.6f, 0f);

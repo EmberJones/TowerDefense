@@ -21,10 +21,8 @@ public class VFXTarget : MonoBehaviour
     private Coroutine flashRoutine;
     private bool flashing;
 
-    /// <summary>True while a BurnStatus is attached to this object.</summary>
     public bool IsBurning => burn != null;
 
-    /// <summary>World-space bounds of the visible model (meshes and sprites only).</summary>
     public Bounds WorldBounds
     {
         get
@@ -44,10 +42,8 @@ public class VFXTarget : MonoBehaviour
         }
     }
 
-    /// <summary>World-space centre of the visible model, used as the particle spawn point.</summary>
     public Vector3 CenterPoint => WorldBounds.center;
 
-    /// <summary>Rough horizontal radius of the model, so particles can start outside it.</summary>
     public float Radius
     {
         get
