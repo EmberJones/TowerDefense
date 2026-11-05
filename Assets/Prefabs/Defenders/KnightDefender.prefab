@@ -566,6 +566,7 @@ MonoBehaviour:
   firePoint: {fileID: 8042380158931682752}
   projectileSpeed: 25
   deferRangedResolution: 0
+  fallbackResolveDelay: 0.65
   showRangeIndicator: 1
   rangeColor: {r: 0.5169811, g: 0.13174237, b: 0.12388036, a: 0.35}
   rangeLineWidth: 0.05

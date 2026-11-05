@@ -14,6 +14,7 @@ public class Attacker : MonoBehaviour
     [SerializeField] public Transform firePoint;
     [SerializeField] public float projectileSpeed = 20f;
     [SerializeField] public bool deferRangedResolution = false;
+    [SerializeField] public float fallbackResolveDelay = 0f;
 
     [Header("Range Indicator")]
     [SerializeField] private bool showRangeIndicator = true;
@@ -88,6 +89,10 @@ public class Attacker : MonoBehaviour
         if (attackType == AttackType.Melee || deferRangedResolution)
         {
             pendingTarget = target;
+
+            if (fallbackResolveDelay > 0f)
+                Invoke(nameof(ResolveAttack), fallbackResolveDelay);
+
             return;
         }
 

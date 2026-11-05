@@ -622,7 +622,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7812851442946687840, guid: 9e0f699128f9a4c4f921d63d79b0d7f0, type: 3}
   firePoint: {fileID: 4616768949021526531}
   projectileSpeed: 25
-  deferRangedResolution: 0
+  deferRangedResolution: 1
+  fallbackResolveDelay: 0.3
   showRangeIndicator: 1
   rangeColor: {r: 0.0747597, g: 0.754717, b: 0.09537223, a: 0.35}
   rangeLineWidth: 0.05
