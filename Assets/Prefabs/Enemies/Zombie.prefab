@@ -164,11 +164,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 08713d490846ad540aa3268abe3e028a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000010511533
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 08713d490846ad540aa3268abe3e028a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.929042
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 08713d490846ad540aa3268abe3e028a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -588,7 +588,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   heightOffset: 0.5
+  coinReward: -1
   ignoreDefenders: 0
   projectilePrefab: {fileID: 0}
   firePoint: {fileID: 0}
   projectileSpeed: 15
+  speedMultiplier: 1
