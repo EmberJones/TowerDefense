@@ -57,6 +57,14 @@ public class VFXManager : MonoBehaviour
     [SerializeField] private float bloodGravity = 3f;
     [SerializeField] private Vector2 bloodSize = new Vector2(0.08f, 0.17f);
 
+    [Header("Slow Effect")]
+    [Tooltip("Colour of the slow rings, the hit flash and the hit sparks.")]
+    [SerializeField] private Color slowColor = new Color(0.08f, 0.18f, 0.7f, 1f);
+    [Tooltip("How long one ring takes to appear, sink to the feet and fade out.")]
+    [SerializeField] private float ringDuration = 0.9f;
+    [Tooltip("Seconds between new rings while an enemy is slowed.")]
+    [SerializeField] private float ringInterval = 0.4f;
+
     [Header("Auto Setup")]
     [Tooltip("Automatically adds a VFXTarget to every object with a Health component.")]
     [SerializeField] private bool autoAttachToHealth = true;
@@ -64,6 +72,9 @@ public class VFXManager : MonoBehaviour
 
     private Material burnFlashMaterial;
     private Material bleedFlashMaterial;
+    private Material slowFlashMaterial;
+    private Material ringMaterial;
+    private Mesh ringMesh;
     private ParticleSystem hitParticles;
     private ParticleSystem emberParticles;
     private ParticleSystem bloodParticles;
@@ -74,6 +85,11 @@ public class VFXManager : MonoBehaviour
     public float EmberRate => emberRate;
     public float BleedDuration => bleedDuration;
     public float BloodDripRate => bloodDripRate;
+    public Color SlowColor => slowColor;
+    public float RingDuration => ringDuration;
+    public float RingInterval => ringInterval;
+    public Mesh RingMesh => ringMesh;
+    public Material RingMaterial => ringMaterial;
 
     private void Awake()
     {
@@ -88,6 +104,10 @@ public class VFXManager : MonoBehaviour
             flashMaterial = CreateFlashMaterial(Color.white);
         burnFlashMaterial = CreateFlashMaterial(burnFlashColor);
         bleedFlashMaterial = CreateFlashMaterial(bleedFlashColor);
+        slowFlashMaterial = CreateFlashMaterial(slowColor);
+
+        ringMesh = CreateRingMesh();
+        ringMaterial = new Material(Shader.Find("Sprites/Default"));
 
         lowPolyMesh = CreateLowPolyMesh();
         hitParticles = CreateHitParticleSystem("Hit Particles");
@@ -108,6 +128,7 @@ public class VFXManager : MonoBehaviour
 
     // ---------------------------------------------------------------- Public API
 
+
     public void PlayDamageEffect(VFXTarget target)
     {
         if (target == null) return;
@@ -116,6 +137,11 @@ public class VFXManager : MonoBehaviour
         {
             target.Flash(burnFlashMaterial, flashDuration);
             PlayEmbers(target.WorldBounds, emberTickBurst, 1.8f);
+        }
+        else if (target.IsSlowed)
+        {
+            target.Flash(slowFlashMaterial, flashDuration);
+            PlayBurst(target.CenterPoint, slowColor, hitParticleCount, target.Radius);
         }
         else
         {
@@ -188,7 +214,6 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-
     public void PlayEmbers(Bounds bounds, int count, float speedMultiplier = 1f)
     {
         if (emberParticles == null) return;
@@ -216,7 +241,6 @@ public class VFXManager : MonoBehaviour
             emberParticles.Emit(emit, 1);
         }
     }
-
 
     public void PlayTrailEmbers(Vector3 position, int count = 1)
     {
@@ -260,6 +284,14 @@ public class VFXManager : MonoBehaviour
         }
     }
 
+    public void PlaySlowApplied(VFXTarget target)
+    {
+        if (target == null) return;
+
+        target.Flash(slowFlashMaterial, flashDuration);
+        PlayBurst(target.CenterPoint, slowColor, hitParticleCount, target.Radius);
+    }
+
     // ---------------------------------------------------------------- Setup
 
     private static Color PickColor(Color[] palette, Color fallback)
@@ -293,6 +325,7 @@ public class VFXManager : MonoBehaviour
         if (mat.HasProperty("_Color")) mat.SetColor("_Color", color);
         return mat;
     }
+
 
     private Mesh CreateLowPolyMesh()
     {
@@ -329,6 +362,42 @@ public class VFXManager : MonoBehaviour
         mesh.colors = cols;
         mesh.triangles = tris;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        return mesh;
+    }
+
+    private Mesh CreateRingMesh()
+    {
+        const int segments = 8;
+        const float outer = 0.5f;
+        const float inner = 0.39f;
+
+        var verts = new Vector3[segments * 2];
+        var normals = new Vector3[segments * 2];
+        var cols = new Color[segments * 2];
+        var tris = new int[segments * 6];
+
+        for (int i = 0; i < segments; i++)
+        {
+            float a = i / (float)segments * Mathf.PI * 2f;
+            float cos = Mathf.Cos(a), sin = Mathf.Sin(a);
+            verts[i * 2] = new Vector3(cos * outer, 0f, sin * outer);
+            verts[i * 2 + 1] = new Vector3(cos * inner, 0f, sin * inner);
+            normals[i * 2] = normals[i * 2 + 1] = Vector3.up;
+            cols[i * 2] = cols[i * 2 + 1] = Color.white;
+
+            int o0 = i * 2, i0 = i * 2 + 1;
+            int o1 = ((i + 1) % segments) * 2, i1 = o1 + 1;
+            int t = i * 6;
+            tris[t] = o0; tris[t + 1] = o1; tris[t + 2] = i0;
+            tris[t + 3] = i0; tris[t + 4] = o1; tris[t + 5] = i1;
+        }
+
+        var mesh = new Mesh { name = "LowPolyRing" };
+        mesh.vertices = verts;
+        mesh.normals = normals;
+        mesh.colors = cols;
+        mesh.triangles = tris;
         mesh.RecalculateBounds();
         return mesh;
     }

@@ -29,7 +29,7 @@ Material:
     - _Bands: 4
     - _CellSize: 0.35
     - _EdgeNoise: 0.344
-    - _FaceVariation: 0.108
+    - _FaceVariation: 0.098
     - _PatchScale: 0.04
     - _PathSoftness: 0.296
     - _PathThreshold: 0.169

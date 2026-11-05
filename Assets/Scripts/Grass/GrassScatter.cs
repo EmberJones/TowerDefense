@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-/// <summary>
-/// Scatters GPU-instanced grass tufts over the grassy part of the terrain,
-/// avoiding the paths/river and the defender placement spots.
-/// Colour and wind are handled entirely by the TerrainGrassURP shader.
-/// </summary>
 public class GrassScatter : MonoBehaviour
 {
     [Header("References")]
@@ -222,7 +217,6 @@ public class GrassScatter : MonoBehaviour
         }
     }
 
-    /// <summary>Copies the terrain colour settings so the grass always matches.</summary>
     public void SyncMaterialWithTerrain()
     {
         Material src = terrainMaterialOverride != null ? terrainMaterialOverride : terrainGenerator.terrainMaterial;
@@ -245,10 +239,6 @@ public class GrassScatter : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Low poly tuft: a handful of tapered blades. Pivot at the base,
-    /// uv.y = 0 at the root and 1 at the tip (used by the shader for wind + shading).
-    /// </summary>
     public static Mesh BuildDefaultTuft(int blades = 5)
     {
         System.Random r = new System.Random(1234);

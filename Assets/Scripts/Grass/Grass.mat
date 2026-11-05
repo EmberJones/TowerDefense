@@ -30,7 +30,7 @@ Material:
     - _Brightness: 1.15
     - _CellSize: 0.35
     - _EdgeNoise: 0.344
-    - _FaceVariation: 0.108
+    - _FaceVariation: 0.098
     - _GustScale: 0.51
     - _GustStrength: 0.12
     - _LightInfluence: 0

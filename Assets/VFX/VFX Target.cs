@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-
 [DisallowMultipleComponent]
 public class VFXTarget : MonoBehaviour
 {
@@ -16,12 +15,18 @@ public class VFXTarget : MonoBehaviour
     private float bleedTimeLeft;
     private float dripTimer;
 
+    private SlowStatus slow;
+    private bool wasSlowed;
+    private SlowRings rings;
+
     private Renderer[] renderers;
     private Material[][] originalMaterials;
     private Coroutine flashRoutine;
     private bool flashing;
 
     public bool IsBurning => burn != null;
+
+    public bool IsSlowed => slow != null;
 
     public Bounds WorldBounds
     {
@@ -87,6 +92,14 @@ public class VFXTarget : MonoBehaviour
             lastThornAmount = amount;
         }
 
+        // Slowed? SlowStatus removes itself when it runs out, so being present means slowed.
+        if (slow == null)
+            TryGetComponent(out slow);
+        bool slowed = slow != null;
+        bool slowApplied = slowed && !wasSlowed;
+        wasSlowed = slowed;
+        bool effectPlayed = thornsAdded > 0;
+
         // Damage effects. A thorn hit also drops health, so it takes priority over the
         // normal white/orange flash for that frame.
         if (thornsAdded > 0)
@@ -98,11 +111,19 @@ public class VFXTarget : MonoBehaviour
         {
             float current = health.CurrentHealth;
             if (current < lastHealth && thornsAdded == 0)
+            {
                 vfx.PlayDamageEffect(this);
+                effectPlayed = true;
+            }
             lastHealth = current;
         }
 
+        // A slow that landed without any damage still gets a blue hit indicator.
+        if (slowApplied && !effectPlayed)
+            vfx.PlaySlowApplied(this);
+
         UpdateBurnEmbers(vfx);
+        UpdateSlowRings(vfx, slowed);
         UpdateBleedDrips(vfx);
     }
 
@@ -143,6 +164,25 @@ public class VFXTarget : MonoBehaviour
             dripTimer -= interval;
             vfx.PlayBlood(WorldBounds, 1, 0.3f); // slow drip, not a splash
         }
+    }
+
+    private void UpdateSlowRings(VFXManager vfx, bool slowed)
+    {
+        if (rings == null)
+        {
+            if (!slowed) return;
+            rings = new SlowRings();
+        }
+
+        // Keep ticking after the slow ends so the last rings can finish fading out.
+        if (!slowed && !rings.HasActive) return;
+
+        rings.Tick(vfx, WorldBounds, slowed, Time.deltaTime);
+    }
+
+    private void OnDestroy()
+    {
+        rings?.Dispose();
     }
 
     private void OnDisable()
