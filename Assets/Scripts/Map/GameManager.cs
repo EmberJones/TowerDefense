@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour
             UpgradeUI.Instance?.Close();
             MainTowerUpgradeUI.Instance?.Close();
         }
+        if (Input.GetMouseButtonDown(0) &&
+    UnityEngine.EventSystems.EventSystem.current != null &&
+    !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+            ShopUI.Instance?.Close();
+            UpgradeUI.Instance?.Close();
+            MainTowerUpgradeUI.Instance?.Close();
+        }
     }
 
     public void GameOver()

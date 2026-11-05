@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float panSpeed = 0.002f;
     [SerializeField] private float maxPanDistance = 40f;
     [SerializeField] private float scrollZoomSpeed = 3f;
+    [SerializeField] private float orbitSpeed = 3f;
 
     private Vector3 panOffset;
     [Header("Key Bindings")]
@@ -107,12 +108,9 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            Vector3 right = cameraTransform.right;
-            Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
-            Vector2 delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-
-            panOffset -= (right * delta.x + forward * delta.y) * (panSpeed * 100f) * currentDistance * 0.1f;
-            panOffset = Vector3.ClampMagnitude(panOffset, maxPanDistance);
+            currentHorizontalAngle -= Input.GetAxis("Mouse X") * orbitSpeed;
+            currentVerticalAngle -= Input.GetAxis("Mouse Y") * orbitSpeed;
+            currentVerticalAngle = Mathf.Clamp(currentVerticalAngle, minVerticalAngle, maxVerticalAngle);
         }
         // Handle reset
         if (Input.GetKeyDown(resetKey))
