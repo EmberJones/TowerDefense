@@ -152,6 +152,9 @@ MonoBehaviour:
   edgeRise: 12
   edgeRiseNoise: 4
   edgeRiseNoiseScale: 0.08
+  valleyWidth: 18
+  valleyShape: 1.5
+  valleyFloorRise: 0.35
   useDebugVertexColors: 1
   debugRiverColor: {r: 0.47058824, g: 0.7215583, b: 0.9647059, a: 1}
   debugPlateauColor: {r: 0, g: 0.7137255, b: 0.02005995, a: 1}

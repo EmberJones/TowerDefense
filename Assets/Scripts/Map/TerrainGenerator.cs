@@ -26,6 +26,13 @@ public class TerrainGenerator : MonoBehaviour
     public float edgeRise = 12f;
     public float edgeRiseNoise = 4f;
     public float edgeRiseNoiseScale = 0.08f;
+    [Tooltip("How far from a path the hills take to reach full height.")]
+    public float valleyWidth = 18f;
+    [Tooltip("Above 1 keeps the valley floor wider before the slopes start.")]
+    public float valleyShape = 1.5f;
+    [Range(0f, 1f)]
+    [Tooltip("How much of the hill rise the path floor keeps. 0 = cut to the ground, 1 = no valley.")]
+    public float valleyFloorRise = 0.35f;
 
     public bool useDebugVertexColors = false;
     public Color debugRiverColor = new Color(0.5f, 0.35f, 0.2f);
@@ -114,8 +121,9 @@ public class TerrainGenerator : MonoBehaviour
                 float worldX = startX + x * cellX;
                 float worldZ = startZ + z * cellZ;
 
-                float pathInfluence = GetPathInfluence(worldX, worldZ);
-                float height = CalculateHeight(worldX, worldZ, pathInfluence);
+                float pathDist = PathDistance(worldX, worldZ);
+                float pathInfluence = InfluenceFromDistance(pathDist);
+                float height = CalculateHeight(worldX, worldZ, pathInfluence, pathDist);
 
                 vertices[index] = new Vector3(worldX, height, worldZ);
                 uvs[index] = new Vector2(x / (float)resX, z / (float)resZ);
@@ -177,16 +185,23 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    private float GetPathInfluence(float worldX, float worldZ)
+    private float PathDistance(float worldX, float worldZ)
     {
-        Vector3 worldPos = new Vector3(worldX, 0f, worldZ);
-        float dist = pathGenerator.GetNearestDistanceToAnyPath(worldPos);
+        return pathGenerator.GetNearestDistanceToAnyPath(new Vector3(worldX, 0f, worldZ));
+    }
 
-        float t = Mathf.InverseLerp(riverBedWidth, riverBedWidth + riverBankWidth, dist);
-        t = Mathf.Clamp01(t);
+    private float InfluenceFromDistance(float dist)
+    {
+        float t = Mathf.Clamp01(Mathf.InverseLerp(riverBedWidth, riverBedWidth + riverBankWidth, dist));
         float smooth = t * t * (3f - 2f * t);
-
         return 1f - smooth;
+    }
+
+    private float ValleyFactor(float dist)
+    {
+        float t = Mathf.Clamp01(Mathf.InverseLerp(riverBedWidth, riverBedWidth + Mathf.Max(valleyWidth, 0.01f), dist));
+        t = Mathf.Pow(t, valleyShape);
+        return t * t * (3f - 2f * t);
     }
 
     private float OutsideDistance(float worldX, float worldZ)
@@ -198,7 +213,7 @@ public class TerrainGenerator : MonoBehaviour
         return Mathf.Sqrt(dx * dx + dz * dz);
     }
 
-    private float CalculateHeight(float worldX, float worldZ, float pathInfluence)
+    private float CalculateHeight(float worldX, float worldZ, float pathInfluence, float pathDist)
     {
         float plateauNoise = Mathf.PerlinNoise((worldX + noiseOffsetX) * noiseScale, (worldZ + noiseOffsetZ) * noiseScale);
         float riverNoise = Mathf.PerlinNoise((worldX + noiseOffsetX) * noiseScale * 2f, (worldZ + noiseOffsetZ) * noiseScale * 2f);
@@ -215,7 +230,8 @@ public class TerrainGenerator : MonoBehaviour
             t = t * t * (3f - 2f * t);
 
             float hillNoise = Mathf.PerlinNoise((worldX + noiseOffsetX) * edgeRiseNoiseScale, (worldZ + noiseOffsetZ) * edgeRiseNoiseScale);
-            height += (edgeRise + hillNoise * edgeRiseNoise) * t * (1f - pathInfluence);
+            float valley = Mathf.Lerp(valleyFloorRise, 1f, ValleyFactor(pathDist));
+            height += (edgeRise + hillNoise * edgeRiseNoise) * t * valley;
         }
 
         return height;
@@ -223,7 +239,8 @@ public class TerrainGenerator : MonoBehaviour
 
     public float SampleHeight(float worldX, float worldZ)
     {
-        return CalculateHeight(worldX, worldZ, GetPathInfluence(worldX, worldZ));
+        float dist = PathDistance(worldX, worldZ);
+        return CalculateHeight(worldX, worldZ, InfluenceFromDistance(dist), dist);
     }
 
     private Material debugMaterial;
