@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bbeff24f48e54d45a1eb193be40349c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crit
-  critChance: 0.25
-  critMultiplier: 2
+  critChance: 0.3
+  critMultiplier: 2.5
   bonusMultiplier: 0

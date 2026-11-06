@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BerserkAttackSpeed
   startsAtHealth: 0.9
   maxedAtHealth: 0.1
-  maxAttackSpeedBonus: 4
+  maxAttackSpeedBonus: 2
   scaleAnimationSpeed: 1
 --- !u!114 &-7888502941263805406
 MonoBehaviour:

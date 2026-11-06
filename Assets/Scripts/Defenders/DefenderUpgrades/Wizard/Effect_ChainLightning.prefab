@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChainLightningEffect
   maxChains: 3
   chainRadius: 20
-  chainDamage: 8
+  chainDamage: 5
   targetLayer:
     serializedVersion: 2
     m_Bits: 64

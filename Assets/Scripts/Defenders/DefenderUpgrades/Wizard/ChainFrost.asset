@@ -19,5 +19,5 @@ MonoBehaviour:
   bonusDamage: 0
   bonusRange: 0
   attackIntervalMultiplier: 1
-  bonusMaxHealth: 10
+  bonusMaxHealth: 20
   effectPrefab: {fileID: 88626050187171379, guid: 50e5abe85d8d2104581340824d1d95ee, type: 3}

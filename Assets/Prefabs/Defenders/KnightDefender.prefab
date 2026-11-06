@@ -557,8 +557,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Attacker
   attackType: 1
   attackRange: 8
-  attackInterval: 3
-  attackDamage: 6
+  attackInterval: 2.5
+  attackDamage: 12
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
