@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,10 @@ public class MainMenu : MonoBehaviour
     [Header("Settings Panel")]
     [SerializeField] private GameObject settingsPanel;
 
+
+    [SerializeField] private GameObject loadingScreen;
+
+    private bool loading;
     private void Start()
     {
 
@@ -18,9 +23,20 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(gameSceneName);
+        if (loading) return;
+        loading = true;
+        StartCoroutine(LoadGame());
     }
+    private IEnumerator LoadGame()
+    {
+        if (loadingScreen != null)
+            loadingScreen.SetActive(true);
 
+        yield return null;
+        yield return null;
+
+        SceneManager.LoadSceneAsync(gameSceneName);
+    }
     public void OpenSettings()
     {
         if (settingsPanel != null)
