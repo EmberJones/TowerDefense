@@ -1588,9 +1588,40 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls\n\nWASD - Pan Camera\nQ/E - Zoom In/Zoom Out\n\nClick on tower
-    spot to open shop menu.\nSelect tower in shop menu to purchase. \n(Towers are
-    free currently for testing purposes)"
+  m_text: 'Controls
+
+
+    Right-click + drag - Orbit the camera around the main tower
+
+    Mouse
+    wheel - Zoom in / out
+
+    Arrow keys - Rotate the camera
+
+    = / - - Zoom in
+    / out
+
+    R - Reset the camera
+
+
+    Click on a tower spot to open the shop
+    menu.
+
+    Select a tower in the shop menu to purchase it (10 coins).
+
+    Click
+    on a defender to open its upgrades (basic upgrades 15 coins, combo upgrades 30
+    coins).
+
+    Click on the main tower to upgrade its max health, regeneration
+    or armour.
+
+    Click anywhere else to close an open menu.
+
+    Click the wave
+    timer to start the next wave early.
+
+    Earn coins by killing enemies.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
